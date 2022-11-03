@@ -6,7 +6,7 @@ graph = create_schema_graph(
     metadata=metadata,
     show_datatypes=True,
     show_indexes=True,
-    rankdir="TB",
+    rankdir="LR",
     concentrate=True,
 )
 graph.write_png("../spec/dbschema.png")
