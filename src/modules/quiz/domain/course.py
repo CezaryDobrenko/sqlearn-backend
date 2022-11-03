@@ -54,6 +54,6 @@ class CourseTemplate(BaseModel):
     quiz_templates: list = relationship("QuizTemplate", lazy="dynamic", uselist=True)
 
     def __str__(self):
-        return f"CourseTemplate({self.name=}, {self.user=})"
+        return f"CourseTemplate({self.name=}, {self.owner=})"
 
     __repr__ = __str__

@@ -31,6 +31,8 @@ class Quiz(BaseModel):
     def __str__(self):
         return f"Quiz({self.title=})"
 
+    __repr__ = __str__
+
 
 class QuizTemplate(BaseModel):
     __tablename__ = "quiz_template"
@@ -56,3 +58,5 @@ class QuizTemplate(BaseModel):
 
     def __str__(self):
         return f"QuizTemplate({self.title=})"
+
+    __repr__ = __str__

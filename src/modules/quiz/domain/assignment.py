@@ -34,6 +34,8 @@ class Assignment(BaseModel):
     def __str__(self):
         return f"Assignment({self.ordinal=}, {self.title=})"
 
+    __repr__ = __str__
+
 
 class AssignmentTemplate(BaseModel):
     __tablename__ = "assignment_template"
@@ -61,3 +63,5 @@ class AssignmentTemplate(BaseModel):
 
     def __str__(self):
         return f"QuizTemplate({self.ordinal=}, {self.title=})"
+
+    __repr__ = __str__

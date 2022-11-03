@@ -1,22 +1,38 @@
 from py_yaml_fixtures import FixturesLoader
 from py_yaml_fixtures.factories.sqlalchemy import SQLAlchemyModelFactory
 from sqlalchemy import create_engine
-from sqlalchemy.orm import configure_mappers, sessionmaker
+from sqlalchemy.orm import sessionmaker
 
 from config import Config
+from models import (
+    Assignment,
+    AssignmentTag,
+    AssignmentTemplate,
+    AssignmentTemplateTag,
+    Course,
+    CourseTemplate,
+    QueryHistory,
+    Quiz,
+    QuizTemplate,
+    Tag,
+    User,
+)
 from models.base_model import AbstractModel
 
-
 # list of our model classes to provide to the factory
-def load_models():
-    from models.user import User
-
-    configure_mappers()
-
-    return [User]
-
-
-model_classes = load_models()
+model_classes = [
+    User,
+    Assignment,
+    AssignmentTemplate,
+    AssignmentTag,
+    Course,
+    CourseTemplate,
+    QueryHistory,
+    Quiz,
+    QuizTemplate,
+    Tag,
+    AssignmentTemplateTag,
+]
 
 # database conntection config
 engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)

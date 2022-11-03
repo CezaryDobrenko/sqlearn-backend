@@ -21,4 +21,6 @@ class QueryHistory(BaseModel):
     )
 
     def __str__(self):
-        return f"QueryHistory({self.title=})"
+        return f"QueryHistory({self.query=}, {self.assignment=})"
+
+    __repr__ = __str__

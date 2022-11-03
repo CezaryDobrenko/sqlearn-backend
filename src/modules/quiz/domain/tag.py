@@ -10,3 +10,5 @@ class Tag(BaseModel):
 
     def __str__(self):
         return f"Tag({self.name=})"
+
+    __repr__ = __str__

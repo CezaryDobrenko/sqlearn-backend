@@ -28,6 +28,8 @@ class AssignmentTag(BaseModel):
     def __str__(self):
         return f"AssignmentTag({self.assignment=}, {self.tag=})"
 
+    __repr__ = __str__
+
 
 class AssignmentTemplateTag(BaseModel):
     __tablename__ = "assignment_template_tag"
@@ -53,4 +55,6 @@ class AssignmentTemplateTag(BaseModel):
     )
 
     def __str__(self):
-        return f"AssignmentTemplateTag({self.assignment=}, {self.tag=})"
+        return f"AssignmentTemplateTag({self.assignment_template=}, {self.tag=})"
+
+    __repr__ = __str__
