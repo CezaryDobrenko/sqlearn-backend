@@ -1,0 +1,18 @@
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.mypy]
+python_version = 3.9
+
+[[tool.mypy.overrides]]
+module = [
+    "sqlalchemy.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+env = [
+    "DB_NAME=testdb",
+    "DB_PORT=8080",
+]

@@ -1,0 +1,51 @@
+version: "3.3"
+
+services:
+  postgres_db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    networks:
+      custom_network:
+        aliases:
+        - postgres_db
+    volumes:
+      - type: bind
+        source: /home/postgres_db/
+        target: /var/lib/postgresql/data/
+    ports:
+      - target: 5432
+        published: 8080
+        mode: host
+
+  backend:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/code
+    env_file: .env
+    entrypoint: ./entrypoint.sh
+    depends_on:
+      - postgres_db
+    networks:
+      custom_network:
+
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      custom_network:
+
+networks:
+  custom_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.13.0/24"

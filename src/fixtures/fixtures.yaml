@@ -1,0 +1,7 @@
+User:
+    user_1:
+        email: active@test.com
+        password: e33dfea6585004c0cf62fb112db55b72f30ed8a81b08efd62d1292e4dd8a31a3
+    user_2:
+        email: inactive@test.com
+        password: e33dfea6585004c0cf62fb112db55b72f30ed8a81b08efd62d1292e4dd8a31a3
