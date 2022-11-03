@@ -23,10 +23,7 @@ def date_to_string_converter(
 
 
 def is_model_joined(query: Query, model: BaseModel) -> bool:
-    if hasattr(query, "_compile_state"):  # SQLAlchemy >= 1.4
-        join_entities = query._compile_state()._join_entities  # type: ignore
-    else:
-        join_entities = query._join_entities  # type: ignore
+    join_entities = query._compile_state()._join_entities
     if model in [mapper.class_ for mapper in join_entities]:
         return True
     return False

@@ -1,4 +1,5 @@
 import graphene
+
 from api.graphql_api.schema.public import PublicQuery
 
 

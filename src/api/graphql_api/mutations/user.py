@@ -1,4 +1,4 @@
-from graphene import Boolean, String, Mutation, ObjectType
+from graphene import Boolean, Mutation, ObjectType, String
 
 
 class TestMutation(Mutation):

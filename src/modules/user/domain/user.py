@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
 from models.utils import generate_hash
@@ -7,6 +8,11 @@ from models.utils import generate_hash
 class User(BaseModel):
     email: str = Column(String(255), index=True, unique=True)
     password: str = Column(String(255))
+
+    courses: list = relationship("Course", lazy="dynamic", uselist=True)
+    course_templates: list = relationship(
+        "CourseTemplate", lazy="dynamic", uselist=True
+    )
 
     def change_email(self, email: str) -> None:
         self.email = email
@@ -17,3 +23,5 @@ class User(BaseModel):
 
     def __str__(self):
         return f"User(email={self.email})"
+
+    __repr__ = __str__
