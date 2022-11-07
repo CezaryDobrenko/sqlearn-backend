@@ -21,6 +21,11 @@ class User(BaseModel):
         password = generate_hash(raw_password)
         self.password = password
 
+    def check_password(self, raw_password: str) -> bool:
+        if self.password == generate_hash(raw_password):
+            return True
+        return False
+
     def __str__(self):
         return f"User(email={self.email})"
 

@@ -1,9 +1,10 @@
 import base64
-from sqlalchemy import create_engine, MetaData
+
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy_schemadisplay import create_schema_graph
 
 # TODO: Do we need cache=shared in our case?
-#engine = create_engine("sqlite:///file:memdb1?mode=memory&cache=shared")
+# engine = create_engine("sqlite:///file:memdb1?mode=memory&cache=shared")
 
 engine = create_engine("sqlite:///:memory:")
 metadata = MetaData(bind=engine)
@@ -77,7 +78,6 @@ connection.close()
 png = graph.create_png()
 encoded_png = base64.b64encode(png)
 print(encoded_png)
-
 
 
 # Zadania na jutro:

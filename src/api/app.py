@@ -1,6 +1,6 @@
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_cors import CORS
-from graphene_file_upload.flask import FileUploadGraphQLView
+from flask_graphql import GraphQLView
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from api.graphql_api import schema
@@ -8,6 +8,7 @@ from config import Config
 from models.base_model import engine
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "very_secret_key"
 
 
 if Config.DEBUG:
@@ -18,15 +19,34 @@ else:
 Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 db_session = scoped_session(Session)
 
-app.add_url_rule(
-    "/graphql/",
-    view_func=FileUploadGraphQLView.as_view(
+
+class MyCustomGraphQLView(GraphQLView):
+    def dispatch_request(self):
+        response = super(MyCustomGraphQLView, self).dispatch_request()
+
+        cookie_session = self.get_context().get("cookie_session")
+        if "set_cookie" in cookie_session:
+            response.headers["Set-Cookie"] = cookie_session.get("set_cookie")
+        cookie_session.clear()
+
+        return response
+
+
+def graphql_view():
+    view = MyCustomGraphQLView.as_view(
         "graphql",
         schema=schema,
         graphiql=True,
-        get_context=lambda: {"session": db_session, "request": request},
-    ),
-)
+        get_context=lambda: {
+            "session": db_session,
+            "request": request,
+            "cookie_session": session,
+        },
+    )
+    return view
+
+
+app.add_url_rule("/graphql/", view_func=graphql_view(), methods=["POST", "GET"])
 
 
 @app.teardown_appcontext

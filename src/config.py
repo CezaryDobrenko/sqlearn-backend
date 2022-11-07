@@ -24,11 +24,15 @@ class BaseConfig:
         "drivername": "postgresql",
         "username": "postgres",
         "password": "password",
-        "host": "localhost",
+        "host": "postgres_db",
         "port": "5432",
         "database": "postgres",
     }
     SQLALCHEMY_DATABASE_URI = get_db_uri(**DATABASE)
+    JWT_ALGORITHM = "HS256"
+    JWT_EXPIRE_TIME = 14400
+    JWT_REFRESH_EXPIRE_TIME = 14400
+    JWT_SECRET = "base_secret"
 
 
 class DevConfig(BaseConfig):
