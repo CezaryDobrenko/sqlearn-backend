@@ -47,7 +47,7 @@ class TestConfig(BaseConfig):
         "username": "postgres",
         "password": "password",
         "host": "localhost",
-        "port": "5432",
+        "port": "8080",
         "database": "testdb",
     }
     SQLALCHEMY_DATABASE_URI = get_db_uri(**DATABASE)
