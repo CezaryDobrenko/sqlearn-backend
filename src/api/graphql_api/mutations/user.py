@@ -45,7 +45,7 @@ class RefreshTokenMutation(Mutation):
         refresh_token = cookie_service.get_cookie("refresh_token")
         user_manager = UserManagementService(session)
         access_token = user_manager.refresh_access_token(refresh_token)
-        return SignInMutation(access_token=access_token)
+        return RefreshTokenMutation(access_token=access_token)
 
 
 class UserMutation(ObjectType):

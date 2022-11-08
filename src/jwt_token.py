@@ -39,5 +39,12 @@ class JWTService:
         }
         return jwt.encode(payload, self.secret, algorithm=self.algorithm)
 
-    def decode_token(self, token: str) -> bool:
+    def get_token_payload(self, token: str, token_type: str) -> dict:
+        payload = self._decode_token(token)
+        payload_token_type = payload.get("token_type", None)
+        if payload_token_type == token_type:
+            return payload
+        raise Exception("Invalid Token type")
+
+    def _decode_token(self, token: str) -> bool:
         return jwt.decode(token, self.secret, algorithms=[self.algorithm])

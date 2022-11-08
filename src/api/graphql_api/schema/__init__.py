@@ -1,14 +1,18 @@
 import graphene
 
+from api.graphql_api.authentication import login_required
 from api.graphql_api.schema.public import PublicQuery
 
-
-class MeQuery(graphene.ObjectType):
-    test = graphene.String()
-
-    def resolve_test(self, info, **kwargs):
-        return "im ok"
+from .user import UserNode
 
 
-class Query(PublicQuery, MeQuery):
+class UserQuery(graphene.ObjectType):
+    user = graphene.Field(UserNode)
+
+    @login_required()
+    def resolve_user(self, info, **kwargs):
+        return kwargs["current_user"]
+
+
+class Query(PublicQuery, UserQuery):
     node = graphene.Node.Field()
