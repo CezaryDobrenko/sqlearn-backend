@@ -1,9 +1,8 @@
-from jwt_token import JWTService, TokenType
+from jwt_token import TokenType
 from models import User
 
 
-def test_sign_up_mutation(db_session, graphql_client, cookie_session):
-    jwt_service = JWTService()
+def test_sign_up_mutation(db_session, graphql_client, jwt_service, cookie_session):
     email = "test@gmail.com"
     password = "secretpassword"
 
@@ -22,7 +21,9 @@ def test_sign_up_mutation(db_session, graphql_client, cookie_session):
     )
 
     access_token = response["data"]["signUp"]["accessToken"]
-    access_payload = jwt_service.decode_token(access_token)
+    access_payload = jwt_service.get_token_payload(
+        access_token, TokenType.AUTHORIZATION.value
+    )
     user = db_session.query(User).first()
     assert not response.get("errors")
     assert access_payload["user_id"] == user.id
@@ -33,8 +34,9 @@ def test_sign_up_mutation(db_session, graphql_client, cookie_session):
     assert "HttpOnly" in cookie_session["set_cookie"]
 
 
-def test_sign_in_mutation(db_session, graphql_client, cookie_session, user_factory):
-    jwt_service = JWTService()
+def test_sign_in_mutation(
+    db_session, graphql_client, jwt_service, cookie_session, user_factory
+):
     email = "test@gmail.com"
     password = "secret@pAs$word997"
     user = user_factory(email=email)
@@ -54,7 +56,9 @@ def test_sign_in_mutation(db_session, graphql_client, cookie_session, user_facto
     )
 
     access_token = response["data"]["signIn"]["accessToken"]
-    access_payload = jwt_service.decode_token(access_token)
+    access_payload = jwt_service.get_token_payload(
+        access_token, TokenType.AUTHORIZATION.value
+    )
     user = db_session.query(User).first()
     assert not response.get("errors")
     assert access_payload["user_id"] == user.id
@@ -66,9 +70,8 @@ def test_sign_in_mutation(db_session, graphql_client, cookie_session, user_facto
 
 
 def test_refresh_token_mutation(
-    db_session, graphql_client, request_factory, user_factory
+    db_session, graphql_client, request_factory, jwt_service, user_factory
 ):
-    jwt_service = JWTService()
     user = user_factory(email="test@gmail.com")
     refresh_token = jwt_service.create_refresh_token(user.id)
     request = request_factory(cookies={"refresh_token": refresh_token})
@@ -86,7 +89,9 @@ def test_refresh_token_mutation(
     )
 
     access_token = response["data"]["refreshToken"]["accessToken"]
-    access_payload = jwt_service.decode_token(access_token)
+    access_payload = jwt_service.get_token_payload(
+        access_token, TokenType.AUTHORIZATION.value
+    )
     assert not response.get("errors")
     assert access_payload["user_id"] == user.id
     assert access_payload["token_type"] == TokenType.AUTHORIZATION.value

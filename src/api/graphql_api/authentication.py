@@ -7,7 +7,7 @@ from jwt_token import JWTService, TokenType
 from models import User
 
 
-def login_required():
+def authentication_required():
     def decorator(func):
         @wraps(func)
         def wrapper(root, info, *args, **kwargs):

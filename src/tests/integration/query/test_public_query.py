@@ -1,0 +1,58 @@
+def test_public_avalible_courses_query(
+    db_session, graphql_client, user_factory, course_template_factory
+):
+    user = user_factory()
+    _ = course_template_factory(
+        name="template_1", is_public=True, is_published=False, owner=user
+    )
+    _ = course_template_factory(
+        name="template_2", is_public=False, is_published=True, owner=user
+    )
+    other_user = user_factory()
+    tempate = course_template_factory(
+        name="template_3", is_public=True, is_published=True, owner=other_user
+    )
+    _ = course_template_factory(
+        name="template_4", is_public=False, is_published=False, owner=other_user
+    )
+
+    query = """
+        query public{
+            public{
+                avalibleCourses{
+                    edges{
+                        node{
+                            name
+                            description
+                            isPublic
+                            isPublished
+                        }
+                    }
+                }
+            }
+        }
+    """
+    expected = {
+        "public": {
+            "avalibleCourses": {
+                "edges": [
+                    {
+                        "node": {
+                            "name": tempate.name,
+                            "description": tempate.description,
+                            "isPublic": tempate.is_public,
+                            "isPublished": tempate.is_published,
+                        }
+                    },
+                ]
+            }
+        }
+    }
+
+    response = graphql_client.execute(
+        query,
+        context_value={"session": db_session},
+    )
+
+    assert not response.get("errors")
+    assert response["data"] == expected

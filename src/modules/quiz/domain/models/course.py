@@ -1,4 +1,6 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+import datetime
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
@@ -13,7 +15,7 @@ class Course(BaseModel):
 
     course_template_id: int = Column(
         Integer(),
-        ForeignKey("course_template.id", ondelete="CASCADE"),
+        ForeignKey("course_template.id", ondelete="SET NULL"),
         index=True,
         nullable=False,
     )
@@ -41,6 +43,10 @@ class CourseTemplate(BaseModel):
     name: str = Column(String(500))
     description: str = Column(String(2000))
 
+    is_public: bool = Column(Boolean, default=False)
+    is_published: bool = Column(Boolean, default=False)
+    last_update_at: Column(DateTime)
+
     owner_id: int = Column(
         Integer(),
         ForeignKey("user.id", ondelete="CASCADE"),
@@ -57,3 +63,8 @@ class CourseTemplate(BaseModel):
         return f"CourseTemplate({self.name=}, {self.owner=})"
 
     __repr__ = __str__
+
+    def update(self, **kwargs):
+        self.is_published = False
+        self.last_update_at = datetime.datetime.utcnow()
+        super().update(**kwargs)

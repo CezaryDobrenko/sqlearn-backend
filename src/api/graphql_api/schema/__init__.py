@@ -1,6 +1,6 @@
 import graphene
 
-from api.graphql_api.authentication import login_required
+from api.graphql_api.authentication import authentication_required
 from api.graphql_api.schema.public import PublicQuery
 
 from .user import UserNode
@@ -9,7 +9,7 @@ from .user import UserNode
 class UserQuery(graphene.ObjectType):
     user = graphene.Field(UserNode)
 
-    @login_required()
+    @authentication_required()
     def resolve_user(self, info, **kwargs):
         return kwargs["current_user"]
 

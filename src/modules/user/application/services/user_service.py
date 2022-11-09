@@ -1,6 +1,6 @@
 from jwt_token import JWTService, TokenType
 from models.utils import get_or_create, transaction_scope
-from modules.user.domain.user import User
+from modules.user.domain.models.user import User
 
 
 class UserManagementService:
@@ -36,8 +36,8 @@ class UserManagementService:
         if not refresh_token:
             raise Exception("Refresh token is not set!")
 
-        payload = self.jwt_service.decode_token(refresh_token)
-        if payload.get("token_type") == TokenType.REFRESH.value:
-            user_id = payload.get("user_id")
-            return self.jwt_service.create_authorization_token(user_id)
-        raise Exception("Invalid token type!")
+        payload = self.jwt_service.get_token_payload(
+            refresh_token, TokenType.REFRESH.value
+        )
+        user_id = payload.get("user_id")
+        return self.jwt_service.create_authorization_token(user_id)
