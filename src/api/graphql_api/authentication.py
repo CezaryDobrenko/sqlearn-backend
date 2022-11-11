@@ -24,8 +24,8 @@ def get_user_by_token(context: dict) -> Optional[User]:
     jwt_service = JWTService()
     session = context["session"]
     request = context["request"]
-    token = get_request_token(request)
     try:
+        token = get_request_token(request)
         payload = jwt_service.get_token_payload(token, TokenType.AUTHORIZATION.value)
         if user_id := payload.get("user_id"):
             user = session.query(User).get(user_id)
