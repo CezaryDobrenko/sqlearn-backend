@@ -39,3 +39,4 @@ def has_user_access(instance: Any, user: User) -> None:
 
 
 import modules.quiz.domain.services.authorize  # noqa
+import modules.user.domain.services.authorize  # noqa

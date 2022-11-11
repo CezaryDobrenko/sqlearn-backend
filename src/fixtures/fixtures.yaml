@@ -73,7 +73,7 @@ AssignmentTemplateTag:
         assignment_template_id: 4
 
 Course:
-    course_template_1:
+    course_1:
         name: Example Course
         description: Example Course Description
         is_finished: false

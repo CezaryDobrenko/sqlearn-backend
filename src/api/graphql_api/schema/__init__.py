@@ -4,6 +4,7 @@ from api.graphql_api.authentication import authentication_required
 from api.graphql_api.schema.public import PublicQuery
 
 from .user import UserNode
+from api.graphql_api.node import AuthorizedNode
 
 
 class UserQuery(graphene.ObjectType):
@@ -16,3 +17,4 @@ class UserQuery(graphene.ObjectType):
 
 class Query(PublicQuery, UserQuery):
     node = graphene.Node.Field()
+    authorized_node = AuthorizedNode.Field()
