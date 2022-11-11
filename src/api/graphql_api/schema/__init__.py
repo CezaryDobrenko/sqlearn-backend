@@ -1,10 +1,10 @@
 import graphene
 
 from api.graphql_api.authentication import authentication_required
+from api.graphql_api.node import AuthorizedNode
 from api.graphql_api.schema.public import PublicQuery
 
 from .user import UserNode
-from api.graphql_api.node import AuthorizedNode
 
 
 class UserQuery(graphene.ObjectType):
