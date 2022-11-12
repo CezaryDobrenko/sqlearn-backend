@@ -17,6 +17,7 @@ class QuizTemplateManagementService:
                 course_template_id=course_template_id,
                 title=title,
             )
+            session.flush()
             if is_created:
                 quiz_template.update(**kwargs)
         return quiz_template

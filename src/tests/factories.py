@@ -4,6 +4,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from models import User
 from modules.course_template.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.quiz import QuizTemplate
 
 
 class UserFactory(SQLAlchemyModelFactory):
@@ -22,4 +23,14 @@ class CourseTemplateFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = CourseTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class QuizTemplateFactory(SQLAlchemyModelFactory):
+    title = factory.Sequence(lambda n: f"quiz-{n}")
+    description = "quiz_description"
+    course_template = SubFactory(CourseTemplateFactory)
+
+    class Meta:
+        model = QuizTemplate
         sqlalchemy_session_persistence = "flush"

@@ -26,7 +26,7 @@ class CreateQuizTemplate(Mutation):
 
 
 class UpdateQuizTemplate(Mutation):
-    course_template = Field(QuizTemplateNode)
+    quiz_template = Field(QuizTemplateNode)
 
     class Arguments:
         quiz_template_id = ID(required=True)
@@ -38,8 +38,8 @@ class UpdateQuizTemplate(Mutation):
         session = info.context["session"]
         quiz_template_pk = retrieve_id(quiz_template_id)
         manager = QuizTemplateManagementService(session)
-        course_template = manager.update(quiz_template_pk, **kwargs)
-        return UpdateQuizTemplate(course_template=course_template)
+        quiz_template = manager.update(quiz_template_pk, **kwargs)
+        return UpdateQuizTemplate(quiz_template=quiz_template)
 
 
 class RemoveQuizTemplate(Mutation):
@@ -58,6 +58,6 @@ class RemoveQuizTemplate(Mutation):
 
 
 class QuizMutation(ObjectType):
-    create_course_template = CreateQuizTemplate.Field()
-    update_course_template = UpdateQuizTemplate.Field()
-    remove_course_template = RemoveQuizTemplate.Field()
+    create_quiz_template = CreateQuizTemplate.Field()
+    update_quiz_template = UpdateQuizTemplate.Field()
+    remove_quiz_template = RemoveQuizTemplate.Field()
