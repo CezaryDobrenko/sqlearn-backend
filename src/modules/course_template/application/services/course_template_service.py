@@ -1,7 +1,7 @@
 from instance_access import authorize_access
 from jwt_token import JWTService
 from models.utils import get_or_create, transaction_scope
-from modules.quiz.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.course import CourseTemplate
 
 
 class CourseTemplateManagementService:
@@ -40,12 +40,12 @@ class CourseTemplateManagementService:
     def publish(self, course_template_id: int, **kwargs) -> bool:
         with transaction_scope(self.session) as session:
             course_template = session.query(CourseTemplate).get(course_template_id)
-            course_template.is_published = True
+            course_template.publish()
         return True
 
     @authorize_access(CourseTemplate)
     def withdraw(self, course_template_id: int, **kwargs) -> bool:
         with transaction_scope(self.session) as session:
             course_template = session.query(CourseTemplate).get(course_template_id)
-            course_template.is_published = False
+            course_template.withdraw()
         return True

@@ -1,6 +1,6 @@
 import datetime
 
-from modules.quiz.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.course import CourseTemplate
 from tests.utils import authenticated_request, gid
 
 

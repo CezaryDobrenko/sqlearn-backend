@@ -1,9 +1,9 @@
 from flask import Flask, request, session
 from flask_cors import CORS
-from flask_graphql import GraphQLView
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from api.graphql_api import schema
+from api.views import MyCustomGraphQLView
 from config import Config
 from models.base_model import engine
 
@@ -20,20 +20,9 @@ Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 db_session = scoped_session(Session)
 
 
-class MyCustomGraphQLView(GraphQLView):
-    def dispatch_request(self):
-        response = super(MyCustomGraphQLView, self).dispatch_request()
-
-        cookie_session = self.get_context().get("cookie_session")
-        if "set_cookie" in cookie_session:
-            response.headers["Set-Cookie"] = cookie_session.get("set_cookie")
-        cookie_session.clear()
-
-        return response
-
-
-def graphql_view():
-    view = MyCustomGraphQLView.as_view(
+app.add_url_rule(
+    "/graphql/",
+    view_func=MyCustomGraphQLView.as_view(
         "graphql",
         schema=schema,
         graphiql=True,
@@ -42,11 +31,9 @@ def graphql_view():
             "request": request,
             "cookie_session": session,
         },
-    )
-    return view
-
-
-app.add_url_rule("/graphql/", view_func=graphql_view(), methods=["POST", "GET"])
+    ),
+    methods=["POST", "GET"],
+)
 
 
 @app.teardown_appcontext

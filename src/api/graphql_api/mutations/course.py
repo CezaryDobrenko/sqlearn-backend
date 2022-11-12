@@ -3,7 +3,7 @@ from graphene import ID, Boolean, Field, Mutation, ObjectType, String
 from api.graphql_api.authentication import authentication_required
 from api.graphql_api.schema.course import CourseTemplateNode
 from api.graphql_api.utils import retrieve_id
-from modules.quiz.application.services.course_template_service import (
+from modules.course_template.application.services.course_template_service import (
     CourseTemplateManagementService,
 )
 

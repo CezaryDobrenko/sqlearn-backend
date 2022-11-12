@@ -3,7 +3,7 @@ from factory import SubFactory
 from factory.alchemy import SQLAlchemyModelFactory
 
 from models import User
-from modules.quiz.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.course import CourseTemplate
 
 
 class UserFactory(SQLAlchemyModelFactory):

@@ -38,5 +38,5 @@ def has_user_access(instance: Any, user: User) -> None:
     raise NotImplementedError
 
 
-import modules.quiz.domain.services.authorize  # noqa
+import modules.course_template.domain.services.authorize  # noqa
 import modules.user.domain.services.authorize  # noqa

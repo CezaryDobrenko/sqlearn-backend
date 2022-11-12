@@ -2,7 +2,7 @@ import graphene
 from graphene.relay.node import to_global_id
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 
-from modules.quiz.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.course import CourseTemplate
 
 from .course import CourseTemplateNode
 
