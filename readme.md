@@ -16,7 +16,7 @@ List of technologies used in the SQLearn-Backend project:
 - [Docker] - great UI boilerplate for modern web apps.
 - [Black] - code formatter.
 - [Isort] - sort imports library.
-- [FLake8] - lint wrapper.
+- [Flake8] - lint wrapper.
 
 ## Installation
 
@@ -62,4 +62,4 @@ make name=new_migration create-migration
    [Docker]: <https://docs.docker.com/>
    [Black]: <https://pypi.org/project/black/>
    [Isort]: <https://isort.readthedocs.io/en/latest/>
-   [FLake8]: <https://flake8.pycqa.org/en/latest/>
+   [Flake8]: <https://flake8.pycqa.org/en/latest/>
