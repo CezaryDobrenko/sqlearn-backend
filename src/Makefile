@@ -20,6 +20,9 @@ migration:
 create-migration:
 	$(path) APP_SETTINGS=$(local_config) alembic revision --autogenerate -m "$(name)"
 
+create-db-diagram:
+	$(path) APP_SETTINGS=$(local_config) python scripts/uml_diagram_generator.py
+
 lint:
 	black .
 	isort .
