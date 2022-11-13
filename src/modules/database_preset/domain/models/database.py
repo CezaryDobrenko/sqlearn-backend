@@ -15,7 +15,7 @@ class Database(BaseModel):
         index=True,
         nullable=True,
     )
-    user = relationship("User")
+    user = relationship("User", foreign_keys=[user_id], back_populates="databases")
 
     tables: list = relationship("Table", lazy="dynamic", uselist=True)
 

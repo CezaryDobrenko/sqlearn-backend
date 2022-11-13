@@ -15,12 +15,12 @@ class Table(BaseModel):
         index=True,
         nullable=True,
     )
-    database_schema = relationship(
+    database = relationship(
         "Database", foreign_keys=[database_id], back_populates="tables"
     )
 
     columns: list = relationship("TableColumn", lazy="dynamic", uselist=True)
-    foreign_keys: list = relationship(
+    relations: list = relationship(
         "TableRelation",
         lazy="dynamic",
         uselist=True,

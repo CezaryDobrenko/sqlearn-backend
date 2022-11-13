@@ -10,6 +10,7 @@ class User(BaseModel):
     password: str = Column(String(255))
 
     courses: list = relationship("Course", lazy="dynamic", uselist=True)
+    databases: list = relationship("Database", lazy="dynamic", uselist=True)
     course_templates: list = relationship(
         "CourseTemplate", lazy="dynamic", uselist=True
     )

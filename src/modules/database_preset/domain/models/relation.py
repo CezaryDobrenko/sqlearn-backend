@@ -35,9 +35,7 @@ class TableRelation(BaseModel):
         index=True,
         nullable=True,
     )
-    table = relationship(
-        "Table", foreign_keys=[table_id], back_populates="foreign_keys"
-    )
+    table = relationship("Table", foreign_keys=[table_id], back_populates="relations")
 
     def __str__(self):
         return (
