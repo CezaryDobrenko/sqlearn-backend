@@ -173,3 +173,231 @@ QueryHistory:
         query: SELECT * FROM users
         is_valid: true
         assignment_id: 4
+
+Database:
+    public_database_1:
+        name: Cars Example Database
+    public_database_2:
+        name: Painting Example Database
+    private_database_user:
+        name: Wiking Database
+        user_id: 1
+
+Table:
+    table_1_1:
+        name: user
+        database_id: 1
+    table_1_2:
+        name: user_cars
+        database_id: 1
+    table_1_3:
+        name: car
+        database_id: 1
+    table_2_1:
+        name: author
+        database_id: 2
+    table_2_2:
+        name: painting
+        database_id: 2
+    table_3_1:
+        name: wiking
+        database_id: 3
+    table_3_2:
+        name: wiking_tribes
+        database_id: 3
+    table_3_3:
+        name: tribe
+        database_id: 3
+
+TableColumn:
+    column_1_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 1
+    column_1_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 1
+    column_1_3:
+        name: surname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 1
+    column_1_4:
+        name: pesel
+        type: TEXT
+        length: 500
+        is_null: true
+        table_id: 1
+    column_2_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 2
+    column_2_2:
+        name: user_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 2
+    column_2_3:
+        name: car_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 2
+    column_3_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 3
+    column_3_2:
+        name: brand
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 3
+    column_3_3:
+        name: price
+        type: REAL
+        is_null: false
+        table_id: 3
+    column_4_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 4
+    column_4_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 4
+    column_4_3:
+        name: surname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 4
+    column_4_4:
+        name: pesel
+        type: TEXT
+        length: 500
+        is_null: true
+        table_id: 4
+    column_5_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 5
+    column_5_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 5
+    column_5_3:
+        name: author_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 5
+    column_6_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 6
+    column_6_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 6
+    column_6_3:
+        name: nickname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 6
+    column_7_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 7
+    column_7_2:
+        name: wiking_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 7
+    column_7_3:
+        name: tribe_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 7
+    column_8_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_id: 8
+    column_8_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_id: 8
+    column_8_3:
+        name: population
+        type: INTEGER
+        is_null: true
+        table_id: 8
+
+TableRelation:
+    relation_1:
+        name: user_cars_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 1
+        relation_column_name: user_id
+        relation_table_id: 2
+    relation_2:
+        name: car_users_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 3
+        relation_column_name: car_id
+        relation_table_id: 2
+    relation_3:
+        name: author_painting_fk
+        action: SET_NULL
+        table_column_name: id
+        table_id: 4
+        relation_column_name: author_id
+        relation_table_id: 5
+    relation_4:
+        name: wiking_tribes_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 5
+        relation_column_name: wiking_id
+        relation_table_id: 6
+    relation_5:
+        name: tribe_wikings_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 7
+        relation_column_name: tribe_id
+        relation_table_id: 6
