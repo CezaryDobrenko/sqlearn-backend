@@ -22,6 +22,7 @@ class TableColumn(BaseModel):
     type: str = Column(Enum(ColumnType), nullable=False)
     length: int = Column(Integer)
     is_null: bool = Column(Boolean)
+    is_unique: bool = Column(Boolean)
 
     table_id: int = Column(
         Integer(),
@@ -32,6 +33,6 @@ class TableColumn(BaseModel):
     table = relationship("Table", foreign_keys=[table_id], back_populates="columns")
 
     def __str__(self):
-        return f"TableColumn({self.name=} {self.type=} {self.length=} {self.is_null=})"
+        return f"TableColumn({self.name=} {self.type=} {self.length=})"
 
     __repr__ = __str__

@@ -17,6 +17,7 @@ class CreateTableColumn(Mutation):
         type = String(required=True)
         length = Int()
         is_null = Boolean()
+        is_unique = Boolean()
 
     @authentication_required()
     def mutate(self, info, table_id: str, name: str, **kwargs):
@@ -36,6 +37,7 @@ class UpdateTableColumn(Mutation):
         type = String()
         length = Int()
         is_null = Boolean()
+        is_unique = Boolean()
 
     @authentication_required()
     def mutate(self, info, table_column_id: str, **kwargs):

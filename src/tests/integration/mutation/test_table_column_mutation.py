@@ -12,15 +12,31 @@ def test_create_table_column_mutation(
     type = "TEXT"
     length = 300
     is_null = False
+    is_unique = True
 
     query = """
-        mutation createTableColumn($tableId: ID!, $name: String!, $type: String!, $length: Int, $isNull: Boolean){
-            createTableColumn(tableId: $tableId, name: $name, type: $type, length: $length, isNull: $isNull){
+        mutation createTableColumn(
+            $tableId: ID!, 
+            $name: String!, 
+            $type: String!, 
+            $length: Int, 
+            $isNull: Boolean, 
+            $isUnique: Boolean
+        ){
+            createTableColumn(
+                tableId: $tableId, 
+                name: $name, 
+                type: $type, 
+                length: $length, 
+                isNull: $isNull, 
+                isUnique: $isUnique
+            ){
                 column{
                     name
                     type
                     length
                     isNull
+                    isUnique
                     table{
                         id
                     }
@@ -34,6 +50,7 @@ def test_create_table_column_mutation(
         "type": type,
         "length": length,
         "isNull": is_null,
+        "isUnique": is_unique,
     }
     expected = {
         "createTableColumn": {
@@ -42,6 +59,7 @@ def test_create_table_column_mutation(
                 "type": type,
                 "length": length,
                 "isNull": is_null,
+                "isUnique": is_unique,
                 "table": {"id": gid(table)},
             }
         }
@@ -71,21 +89,37 @@ def test_update_table_column_mutation(
     database = database_factory(user=user)
     table = table_factory(database=database)
     column = table_column_factory(
-        table=table, name="old_name", type="TEXT", length=200, is_null=True
+        table=table, name="old_name", type="TEXT", length=200, is_null=True, is_unique=True
     )
     new_name = "new_name"
     new_type = "INTEGER"
     new_length = 15
     new_is_null = False
+    new_is_unique = False
 
     query = """
-        mutation updateTableColumn($tableColumnId: ID!, $name: String, $type: String, $length: Int, $isNull: Boolean){
-            updateTableColumn(tableColumnId: $tableColumnId, name: $name, type: $type, length: $length, isNull: $isNull){
+        mutation updateTableColumn(
+            $tableColumnId: ID!, 
+            $name: String, 
+            $type: String, 
+            $length: Int, 
+            $isNull: Boolean, 
+            $isUnique: Boolean
+        ){
+            updateTableColumn(
+                tableColumnId: $tableColumnId, 
+                name: $name, 
+                type: $type, 
+                length: $length, 
+                isNull: $isNull, 
+                isUnique: $isUnique
+            ){
                 column{
                     name
                     type
                     length
                     isNull
+                    isUnique
                     table{
                         id
                     }
@@ -99,6 +133,7 @@ def test_update_table_column_mutation(
         "type": new_type,
         "length": new_length,
         "isNull": new_is_null,
+        "isUnique": new_is_unique,
     }
     expected = {
         "updateTableColumn": {
@@ -107,6 +142,7 @@ def test_update_table_column_mutation(
                 "type": new_type,
                 "length": new_length,
                 "isNull": new_is_null,
+                "isUnique": new_is_unique,
                 "table": {"id": gid(table)},
             }
         }

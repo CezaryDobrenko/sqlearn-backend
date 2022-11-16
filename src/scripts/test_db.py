@@ -17,7 +17,7 @@ cursor.execute(
     """CREATE TABLE COMPANY
          (ID INT PRIMARY KEY     NOT NULL,
          SUB_ID         TEXT     NOT NULL,
-         NAME           TEXT    NOT NULL,
+         NAME           TEXT    NOT NULL UNIQUE,
          AGE            INT     NOT NULL,
          ADDRESS        CHAR(50),
          SALARY         REAL);"""
