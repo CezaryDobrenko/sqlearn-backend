@@ -54,6 +54,7 @@ def upgrade():
             nullable=True,
         ),
         sa.Column("name", sa.String(length=500), nullable=True),
+        sa.Column("description", sa.String(length=2000), nullable=True),
         sa.Column("database_id", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(["database_id"], ["database.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
@@ -79,7 +80,7 @@ def upgrade():
         sa.Column("name", sa.String(length=500), nullable=True),
         sa.Column(
             "type",
-            sa.Enum("INTEGER", "REAL", "TEXT", "BLOB", "NULL", name="columntype"),
+            sa.Enum("INTEGER", "NUMERIC", "REAL", "TEXT", "BLOB", name="columntype"),
             nullable=False,
         ),
         sa.Column("length", sa.Integer(), nullable=True),

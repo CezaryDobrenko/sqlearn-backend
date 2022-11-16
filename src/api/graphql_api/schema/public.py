@@ -4,6 +4,7 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField
 
 from modules.course_template.domain.models.course import CourseTemplate
 from modules.database_preset.domain.models.database import Database
+from modules.database_preset.domain.models.column import ColumnType
 
 from .course import CourseTemplateNode
 from .database import DatabaseNode
@@ -13,6 +14,7 @@ class Public(graphene.ObjectType):
     id = graphene.ID()
     avalible_courses = SQLAlchemyConnectionField(CourseTemplateNode)
     databases = SQLAlchemyConnectionField(DatabaseNode)
+    column_types = graphene.List(graphene.String)
 
     def resolve_avalible_courses(self, info, **kwargs):
         session = info.context["session"]
@@ -25,6 +27,9 @@ class Public(graphene.ObjectType):
         session = info.context["session"]
         databases = session.query(Database).filter(Database.user_id.is_(None))
         return databases
+
+    def resolve_column_types(self, info, **kwargs):
+        return [column.value for column in ColumnType]
 
 
 class PublicQuery(graphene.ObjectType):

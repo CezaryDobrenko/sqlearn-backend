@@ -24,7 +24,7 @@ class TableRelation(BaseModel):
         Integer(),
         ForeignKey("table.id", ondelete="CASCADE"),
         index=True,
-        nullable=True,
+        nullable=False,
     )
     relation_table = relationship("Table", foreign_keys=[relation_table_id])
 
@@ -33,9 +33,13 @@ class TableRelation(BaseModel):
         Integer(),
         ForeignKey("table.id", ondelete="CASCADE"),
         index=True,
-        nullable=True,
+        nullable=False,
     )
-    table = relationship("Table", foreign_keys=[table_id], back_populates="relations")
+    table = relationship(
+        "Table",
+        foreign_keys=[table_id],
+        back_populates="relations",
+    )
 
     def __str__(self):
         return (

@@ -39,4 +39,5 @@ def has_user_access(instance: Any, user: User) -> None:
 
 
 import modules.course_template.domain.services.authorize  # noqa
+import modules.database_preset.domain.services.authorize  # noqa
 import modules.user.domain.services.authorize  # noqa

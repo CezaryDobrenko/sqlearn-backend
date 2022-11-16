@@ -12,11 +12,23 @@ from api.graphql_api import schema
 from config import TestConfig
 from jwt_token import JWTService
 from models.base_model import AbstractModel
-from tests.factories import CourseTemplateFactory, QuizTemplateFactory, UserFactory
+from tests.factories import (
+    CourseTemplateFactory,
+    DatabaseFactory,
+    QuizTemplateFactory,
+    TableColumnFactory,
+    TableFactory,
+    TableRelationFactory,
+    UserFactory,
+)
 
 register(UserFactory)
 register(CourseTemplateFactory)
 register(QuizTemplateFactory)
+register(DatabaseFactory)
+register(TableFactory)
+register(TableColumnFactory)
+register(TableRelationFactory)
 
 
 class RequestFactory:
@@ -53,7 +65,15 @@ def db_session(db_connection):
     session = sessionmaker(bind=db_connection)
     db_session = session()
 
-    factories = [UserFactory, CourseTemplateFactory, QuizTemplateFactory]
+    factories = [
+        UserFactory,
+        CourseTemplateFactory,
+        QuizTemplateFactory,
+        DatabaseFactory,
+        TableFactory,
+        TableColumnFactory,
+        TableRelationFactory,
+    ]
     for factory in factories:
         factory._meta.sqlalchemy_session = db_session
 

@@ -8,10 +8,11 @@ from models.base_model import BaseModel
 
 class ColumnType(enum.Enum):
     INTEGER = "INTEGER"
+    NUMERIC = "NUMERIC"
     REAL = "REAL"
     TEXT = "TEXT"
     BLOB = "BLOB"
-    NULL = "NULL"
+    
 
 
 class TableColumn(BaseModel):

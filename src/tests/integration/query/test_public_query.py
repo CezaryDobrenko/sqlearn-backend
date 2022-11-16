@@ -56,3 +56,51 @@ def test_public_avalible_courses_query(
 
     assert not response.get("errors")
     assert response["data"] == expected
+
+
+def test_public_databases_query(
+    db_session, graphql_client, user_factory, database_factory
+):
+    database_1 = database_factory(name="database_1", user=None)
+    database_2 = database_factory(name="database_2", user=None)
+    user = user_factory()
+    _ = database_factory(name="database_3", user=user)
+    other_user = user_factory()
+    _ = database_factory(name="database_4", user=other_user)
+
+    query = """
+        query publicDatabases{
+            public{
+                databases{
+                    edges{
+                        node{
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    """
+    expected = {
+        "public": {
+            "databases": {
+                "edges": [
+                    {
+                        "node": {
+                            "name": database_1.name,
+                        }
+                    },
+                    {
+                        "node": {
+                            "name": database_2.name,
+                        }
+                    },
+                ]
+            }
+        }
+    }
+
+    response = graphql_client.execute(query, context_value={"session": db_session})
+
+    assert not response.get("errors")
+    assert response["data"] == expected
