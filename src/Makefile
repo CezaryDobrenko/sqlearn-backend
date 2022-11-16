@@ -11,6 +11,9 @@ test-cov:
 reload-db:
 	$(path) APP_SETTINGS=$(local_config) python scripts/recreate_db.py
 
+sql-in-memory:
+	$(path) APP_SETTINGS=$(local_config) python scripts/test_db.py
+
 reload-data:
 	$(path) APP_SETTINGS=$(local_config) python fixtures/load.py
 

@@ -11,10 +11,12 @@ metadata = MetaData(bind=engine)
 connection = engine.raw_connection()
 cursor = connection.cursor()
 
+cursor.execute("""PRAGMA foreign_keys=on;""")
 cursor.execute("""DROP TABLE IF EXISTS COMPANY""")
 cursor.execute(
     """CREATE TABLE COMPANY
          (ID INT PRIMARY KEY     NOT NULL,
+         SUB_ID         TEXT     NOT NULL,
          NAME           TEXT    NOT NULL,
          AGE            INT     NOT NULL,
          ADDRESS        CHAR(50),
@@ -22,42 +24,75 @@ cursor.execute(
 )
 
 cursor.execute(
-    "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-      VALUES (1, 'Paul', 32, 'California', 20000.00 )"
+    "INSERT INTO COMPANY (ID,SUB_ID,NAME,AGE,ADDRESS,SALARY) \
+      VALUES (1, 'x', 'Paul', 32, 'California', 20000.00 )"
 )
 
 cursor.execute(
-    "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-      VALUES (2, 'Allen', 25, 'Texas', 15000.00 )"
+    "INSERT INTO COMPANY (ID,SUB_ID,NAME,AGE,ADDRESS,SALARY) \
+      VALUES (2, 'y', 'Allen', 25, 'Texas', 15000.00 )"
 )
 
 cursor.execute(
-    "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-      VALUES (3, 'Teddy', 23, 'Norway', 20000.00 )"
+    "INSERT INTO COMPANY (ID,SUB_ID,NAME,AGE,ADDRESS,SALARY) \
+      VALUES (3, 'z', 'Teddy', 23, 'Norway', 20000.00 )"
 )
 
 cursor.execute(
-    "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) \
-      VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 )"
+    "INSERT INTO COMPANY (ID,SUB_ID,NAME,AGE,ADDRESS,SALARY) \
+      VALUES (4, 'w', 'Mark', 25, 'Rich-Mond ', 65000.00 )"
 )
 
 connection.commit()
 
 cursor.execute("""DROP TABLE IF EXISTS TEST""")
 cursor.execute(
-    """CREATE TABLE TEST
-         (ID INT PRIMARY KEY     NOT NULL,
-         NAME           TEXT    NOT NULL,
-         COMPANY_ID     INT     NOT NULL,
-         FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY);"""
+    """CREATE TABLE TEST(
+        ID INT PRIMARY KEY     NOT NULL,
+        NAME           TEXT    NOT NULL,
+        COMPANY_ID     INT     NULL,
+        COMPANY_SUB_ID TEXT     NULL,
+        FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY ON DELETE SET NULL
+    );"""
 )
 
-cursor.execute("INSERT INTO TEST (ID,NAME,COMPANY_ID) VALUES (1, 'OtherTable1', 1)")
-cursor.execute("INSERT INTO TEST (ID,NAME,COMPANY_ID) VALUES (2, 'OtherTable2', 2)")
-cursor.execute("INSERT INTO TEST (ID,NAME,COMPANY_ID) VALUES (3, 'OtherTable3', 3)")
-cursor.execute("INSERT INTO TEST (ID,NAME,COMPANY_ID) VALUES (4, 'OtherTable4', 4)")
+cursor.execute(
+    "INSERT INTO TEST (ID,NAME,COMPANY_ID,COMPANY_SUB_ID) VALUES (1, 'OtherTable1', 1, 'x')"
+)
+cursor.execute(
+    "INSERT INTO TEST (ID,NAME,COMPANY_ID,COMPANY_SUB_ID) VALUES (2, 'OtherTable2', 2, 'y')"
+)
+cursor.execute(
+    "INSERT INTO TEST (ID,NAME,COMPANY_ID,COMPANY_SUB_ID) VALUES (3, 'OtherTable3', 3, 'z')"
+)
+cursor.execute(
+    "INSERT INTO TEST (ID,NAME,COMPANY_ID,COMPANY_SUB_ID) VALUES (4, 'OtherTable4', 4, 'w')"
+)
 
 connection.commit()
+
+result = cursor.execute(
+    "SELECT c.id, c.name, c.age, t.name FROM COMPANY as c LEFT JOIN TEST as t ON c.ID=t.COMPANY_ID"
+)
+for row in result:
+    print(row)
+
+result = cursor.execute("DELETE FROM COMPANY WHERE ID=1")
+
+print("----------------")
+
+result = cursor.execute(
+    "SELECT c.id, c.name, c.age, t.name FROM COMPANY as c LEFT JOIN TEST as t ON c.ID=t.COMPANY_ID"
+)
+for row in result:
+    print(row)
+
+print("----------------")
+
+result = cursor.execute("SELECT * FROM TEST")
+for row in result:
+    print(row)
+
 
 graph = create_schema_graph(
     metadata=metadata,
@@ -77,7 +112,6 @@ connection.close()
 
 png = graph.create_png()
 encoded_png = base64.b64encode(png)
-print(encoded_png)
 
 
 # Zadania na jutro:
