@@ -14,8 +14,8 @@ class ColumnType(enum.Enum):
     BLOB = "BLOB"
 
 
-class TableColumn(BaseModel):
-    __tablename__ = "table_column"
+class TableColumnAssignmentTemplate(BaseModel):
+    __tablename__ = "table_column_assignment_template"
 
     name: str = Column(String(500))
     type: str = Column(Enum(ColumnType), nullable=False)
@@ -23,13 +23,18 @@ class TableColumn(BaseModel):
     is_null: bool = Column(Boolean)
     is_unique: bool = Column(Boolean)
 
-    table_id: int = Column(
+    table_assignment_template_id: int = Column(
         Integer(),
-        ForeignKey("table.id", ondelete="CASCADE"),
+        ForeignKey("table_assignment_template.id", ondelete="CASCADE"),
         index=True,
         nullable=True,
     )
-    table = relationship("Table", foreign_keys=[table_id], back_populates="columns")
+    table_assignment_template = relationship(
+        "TableAssignmentTemplate",
+        foreign_keys=[table_assignment_template_id],
+        back_populates="columns",
+    )
+    data: list = relationship("TableColumnDataTemplate", lazy="dynamic", uselist=True)
 
     def __str__(self):
         return f"TableColumn({self.name=} {self.type=} {self.length=})"

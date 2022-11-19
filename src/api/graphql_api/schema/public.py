@@ -3,8 +3,8 @@ from graphene.relay.node import to_global_id
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 
 from modules.course_template.domain.models.course import CourseTemplate
-from modules.database_preset.domain.models.database import Database
 from modules.database_preset.domain.models.column import ColumnType
+from modules.database_preset.domain.models.database import Database
 
 from .course import CourseTemplateNode
 from .database import DatabaseNode

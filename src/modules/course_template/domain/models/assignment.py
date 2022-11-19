@@ -24,6 +24,7 @@ class AssignmentTemplate(BaseModel):
         back_populates="assignments_templates",
     )
 
+    database = relationship("DatabaseAssignmentTemplate", uselist=False)
     template_tags: list = relationship(
         "AssignmentTemplateTag", lazy="dynamic", uselist=True
     )

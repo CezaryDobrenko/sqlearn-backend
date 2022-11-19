@@ -16,19 +16,19 @@ def test_create_table_column_mutation(
 
     query = """
         mutation createTableColumn(
-            $tableId: ID!, 
-            $name: String!, 
-            $type: String!, 
-            $length: Int, 
-            $isNull: Boolean, 
+            $tableId: ID!,
+            $name: String!,
+            $type: String!,
+            $length: Int,
+            $isNull: Boolean,
             $isUnique: Boolean
         ){
             createTableColumn(
-                tableId: $tableId, 
-                name: $name, 
-                type: $type, 
-                length: $length, 
-                isNull: $isNull, 
+                tableId: $tableId,
+                name: $name,
+                type: $type,
+                length: $length,
+                isNull: $isNull,
                 isUnique: $isUnique
             ){
                 column{
@@ -89,7 +89,12 @@ def test_update_table_column_mutation(
     database = database_factory(user=user)
     table = table_factory(database=database)
     column = table_column_factory(
-        table=table, name="old_name", type="TEXT", length=200, is_null=True, is_unique=True
+        table=table,
+        name="old_name",
+        type="TEXT",
+        length=200,
+        is_null=True,
+        is_unique=True,
     )
     new_name = "new_name"
     new_type = "INTEGER"
@@ -99,19 +104,19 @@ def test_update_table_column_mutation(
 
     query = """
         mutation updateTableColumn(
-            $tableColumnId: ID!, 
-            $name: String, 
-            $type: String, 
-            $length: Int, 
-            $isNull: Boolean, 
+            $tableColumnId: ID!,
+            $name: String,
+            $type: String,
+            $length: Int,
+            $isNull: Boolean,
             $isUnique: Boolean
         ){
             updateTableColumn(
-                tableColumnId: $tableColumnId, 
-                name: $name, 
-                type: $type, 
-                length: $length, 
-                isNull: $isNull, 
+                tableColumnId: $tableColumnId,
+                name: $name,
+                type: $type,
+                length: $length,
+                isNull: $isNull,
                 isUnique: $isUnique
             ){
                 column{
