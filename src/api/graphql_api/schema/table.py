@@ -1,14 +1,14 @@
-from graphene import JSONString, List, ObjectType, relay
+from graphene import ObjectType, relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 
 from api.graphql_api.connection import ExtendedConnection
 from api.graphql_api.node import AuthorizedNode
-from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 from modules.course_template.domain.models.column_data import TableColumnDataTemplate
 from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.database_preset.domain.models.table import Table
 
 from .table_column import TableColumnAssignmentTemplateNode, TableColumnNode
+from .table_data import TableColumnDataTemplateNode
 from .table_relation import TableRelationAssignmentTemplateNode, TableRelationNode
 
 
@@ -16,28 +16,23 @@ class TableRowNode(ObjectType):
     class Meta:
         interfaces = (relay.Node,)
 
-    values = List(of_type=JSONString)
+    cells = SQLAlchemyConnectionField(TableColumnDataTemplateNode)
 
     @classmethod
     def from_template(cls, table_template: TableAssignmentTemplate):
         column_count = table_template.columns.count()
         data_set = (
             table_template.columns.join(TableColumnDataTemplate)
-            .with_entities(TableColumnAssignmentTemplate, TableColumnDataTemplate)
+            .with_entities(TableColumnDataTemplate)
             .all()
         )
-        rows = []
-        for i in range(0, len(data_set), column_count):
-            rows.append(
-                cls(
-                    id=f"{table_template.id}.{i}.table_assignment_template",
-                    values=[
-                        {"column": column.name, "value": data.value}
-                        for column, data in data_set[i: i + column_count]
-                    ],
-                )
+        return [
+            cls(
+                id=f"{table_template.id}.{i}.table_assignment_template",
+                ceils=data_set[i: i + column_count],
             )
-        return rows
+            for i in range(0, len(data_set), column_count)
+        ]
 
 
 class TableRowConnection(relay.Connection):
