@@ -3,11 +3,19 @@ from factory import SubFactory
 from factory.alchemy import SQLAlchemyModelFactory
 
 from models import User
+from modules.course_template.domain.models.assignment import AssignmentTemplate
+from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
+from modules.course_template.domain.models.column_data import TableColumnDataTemplate
 from modules.course_template.domain.models.course import CourseTemplate
+from modules.course_template.domain.models.database import DatabaseAssignmentTemplate
 from modules.course_template.domain.models.quiz import QuizTemplate
-from modules.database_preset.domain.models.column import TableColumn
+from modules.course_template.domain.models.relation import (
+    TableRelationAssignmentTemplate,
+)
+from modules.course_template.domain.models.table import TableAssignmentTemplate
+from modules.database_preset.domain.models.column import ColumnType, TableColumn
 from modules.database_preset.domain.models.database import Database
-from modules.database_preset.domain.models.relation import TableRelation
+from modules.database_preset.domain.models.relation import RelationAction, TableRelation
 from modules.database_preset.domain.models.table import Table
 
 
@@ -40,6 +48,18 @@ class QuizTemplateFactory(SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "flush"
 
 
+class AssignmentTemplateFactory(SQLAlchemyModelFactory):
+    title = factory.Sequence(lambda n: f"assignment-{n}")
+    ordinal = factory.Sequence(lambda n: n)
+    description = "assignment_description"
+    quiz_template = SubFactory(QuizTemplateFactory)
+    owner_solution = "SELECT * FROM users;"
+
+    class Meta:
+        model = AssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
 class DatabaseFactory(SQLAlchemyModelFactory):
     name = factory.Sequence(lambda n: f"database-{n}")
     user = SubFactory(UserFactory)
@@ -61,7 +81,7 @@ class TableFactory(SQLAlchemyModelFactory):
 
 class TableColumnFactory(SQLAlchemyModelFactory):
     name = factory.Sequence(lambda n: f"column-{n}")
-    type = "TEXT"
+    type = ColumnType.TEXT
     length = 200
     is_null = True
     table = SubFactory(TableFactory)
@@ -73,7 +93,7 @@ class TableColumnFactory(SQLAlchemyModelFactory):
 
 class TableRelationFactory(SQLAlchemyModelFactory):
     name = factory.Sequence(lambda n: f"column-{n}")
-    action = "CASCADE"
+    action = RelationAction.CASCADE
     relation_column_name = "id"
     relation_table = SubFactory(TableFactory)
     table_column_name = "other_id"
@@ -81,4 +101,58 @@ class TableRelationFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = TableRelation
+        sqlalchemy_session_persistence = "flush"
+
+
+class DatabaseAssignmentTemplateFactory(SQLAlchemyModelFactory):
+    name = factory.Sequence(lambda n: f"database_assignment-{n}")
+    assignment_template = SubFactory(AssignmentTemplateFactory)
+
+    class Meta:
+        model = DatabaseAssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class TableAssignmentTemplateFactory(SQLAlchemyModelFactory):
+    name = factory.Sequence(lambda n: f"table_assignment-{n}")
+    description = "table_assignment_description"
+    database_assignment_template = SubFactory(DatabaseAssignmentTemplateFactory)
+
+    class Meta:
+        model = TableAssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class TableColumnAssignmentTemplateFactory(SQLAlchemyModelFactory):
+    name = factory.Sequence(lambda n: f"column_assignment-{n}")
+    type = ColumnType.TEXT
+    length = 200
+    is_null = True
+    is_unique = True
+    table_assignment_template = SubFactory(TableAssignmentTemplateFactory)
+
+    class Meta:
+        model = TableColumnAssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class TableRelationAssignmentTemplateFactory(SQLAlchemyModelFactory):
+    name = factory.Sequence(lambda n: f"relation_assignment-{n}")
+    action = RelationAction.CASCADE
+    relation_column_name = "id"
+    relation_table = SubFactory(TableAssignmentTemplateFactory)
+    table_column_name = "other_id"
+    table = SubFactory(TableAssignmentTemplateFactory)
+
+    class Meta:
+        model = TableRelationAssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class TableColumnDataTemplateFactory(SQLAlchemyModelFactory):
+    value = factory.Sequence(lambda n: f"data-{n}")
+    table_column_assignment_template = SubFactory(TableColumnAssignmentTemplateFactory)
+
+    class Meta:
+        model = TableColumnDataTemplate
         sqlalchemy_session_persistence = "flush"

@@ -13,11 +13,17 @@ from config import TestConfig
 from jwt_token import JWTService
 from models.base_model import AbstractModel
 from tests.factories import (
+    AssignmentTemplateFactory,
     CourseTemplateFactory,
+    DatabaseAssignmentTemplateFactory,
     DatabaseFactory,
     QuizTemplateFactory,
+    TableAssignmentTemplateFactory,
+    TableColumnAssignmentTemplateFactory,
+    TableColumnDataTemplateFactory,
     TableColumnFactory,
     TableFactory,
+    TableRelationAssignmentTemplateFactory,
     TableRelationFactory,
     UserFactory,
 )
@@ -29,6 +35,12 @@ register(DatabaseFactory)
 register(TableFactory)
 register(TableColumnFactory)
 register(TableRelationFactory)
+register(AssignmentTemplateFactory)
+register(DatabaseAssignmentTemplateFactory)
+register(TableAssignmentTemplateFactory)
+register(TableColumnAssignmentTemplateFactory)
+register(TableRelationAssignmentTemplateFactory)
+register(TableColumnDataTemplateFactory)
 
 
 class RequestFactory:
@@ -73,6 +85,12 @@ def db_session(db_connection):
         TableFactory,
         TableColumnFactory,
         TableRelationFactory,
+        AssignmentTemplateFactory,
+        DatabaseAssignmentTemplateFactory,
+        TableAssignmentTemplateFactory,
+        TableColumnAssignmentTemplateFactory,
+        TableRelationAssignmentTemplateFactory,
+        TableColumnDataTemplateFactory,
     ]
     for factory in factories:
         factory._meta.sqlalchemy_session = db_session
