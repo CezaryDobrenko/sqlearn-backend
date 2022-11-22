@@ -29,34 +29,28 @@ QuizTemplate:
         course_template_id: 1
     quiz_template_2:
         title: Example Quiz 2
-        description: Example Quiz 2 Description
+        description: Empty Quiz
         course_template_id: 1
 
 AssignmentTemplate:
-    assignment_template_1_1:
-        ordinal: 1
-        title: Example Assignment 1 Quiz 1
-        description: Example Assignment 1 Description Quiz 1
+    assignment_template_1:
+        ordinal: 3
+        title: Assignment 3
+        description: Based on Assignment 2
         owner_solution: SELECT * FROM users
         quiz_template_id: 1
-    assignment_template_1_2:
-        ordinal: 2
-        title: Example Assignment 2 Quiz 1
-        description: Example Assignment 2 Description Quiz 1
+    assignment_template_2:
+        ordinal: 1
+        title: Assignment 1
+        description: Based on Cars Example Database
         owner_solution: SELECT * FROM users
         quiz_template_id: 1
-    assignment_template_2_1:
+    assignment_template_3:
         ordinal: 2
-        title: Example Assignment 1 Quiz 2
-        description: Example Assignment 1 Description Quiz 2
+        title: Assignment 2
+        description: Based on Assignment 1
         owner_solution: SELECT * FROM users
-        quiz_template_id: 2
-    assignment_template_2_2:
-        ordinal: 1
-        title: Example Assignment 2 Quiz 2
-        description: Example Assignment 2 Description Quiz 2
-        owner_solution: SELECT * FROM users
-        quiz_template_id: 2
+        quiz_template_id: 1
 
 AssignmentTemplateTag:
     assignment_template_tag_1:
@@ -68,9 +62,6 @@ AssignmentTemplateTag:
     assignment_template_tag_3:
         tag_id: 3
         assignment_template_id: 3
-    assignment_template_tag_4:
-        tag_id: 4
-        assignment_template_id: 4
 
 Course:
     course_1:
@@ -88,39 +79,477 @@ Quiz:
         course_id: 1
     quiz_2:
         title: Example Quiz 2
-        description: Example Quiz 2 Description
+        description: Empty Quiz
         quiz_template_id: 2
         course_id: 1
 
 Assignment:
-    assignment_1_1:
-        ordinal: 1
-        title: Example Assignment 1 Quiz 1
-        description: Example Assignment 1 Description Quiz 1
-        solution: SELECT * FROM users
+    assignment_1:
+        ordinal: 3
+        title: Assignment 3
+        description: Based on Assignment 2
+        solution: SELECT * FROM user as u LEFT JOIN user_cars as uc ON u.id=uc.user_id
         assignment_template_id: 1
         quiz_id: 1
-    assignment_1_2:
-        ordinal: 2
-        title: Example Assignment 2 Quiz 1
-        description: Example Assignment 2 Description Quiz 1
-        solution: SELECT * FROM users
+    assignment_2:
+        ordinal: 1
+        title: Assignment 1
+        description: Based on Cars Example Database
+        solution: SELECT * FROM user as u LEFT JOIN user_cars as uc ON u.id=uc.user_id
         assignment_template_id: 2
         quiz_id: 1
-    assignment_2_1:
+    assignment_3:
         ordinal: 2
-        title: Example Assignment 1 Quiz 2
-        description: Example Assignment 1 Description Quiz 2
-        solution: SELECT * FROM users
+        title: Assignment 2
+        description: Based on Assignment 1
+        solution: SELECT * FROM user as u LEFT JOIN user_cars as uc ON u.id=uc.user_id
         assignment_template_id: 3
-        quiz_id: 2
-    assignment_2_2:
-        ordinal: 1
-        title: Example Assignment 2 Quiz 2
-        description: Example Assignment 2 Description Quiz 2
-        solution: SELECT * FROM users
-        assignment_template_id: 4
-        quiz_id: 2
+        quiz_id: 1
+
+DatabaseAssignmentTemplate:
+    assignment_template_database_1:
+        name: Cars Example Database
+        assignment_template_id: 1
+    assignment_template_database_2:
+        name: Cars Example Database
+        assignment_template_id: 2
+    assignment_template_database_3:
+        name: Cars Example Database
+        assignment_template_id: 3
+
+TableAssignmentTemplate:
+    assignment_template_table_1_1:
+        name: user
+        database_assignment_template_id: 1
+    assignment_template_table_1_2:
+        name: user_cars
+        database_assignment_template_id: 1
+    assignment_template_table_1_3:
+        name: car
+        database_assignment_template_id: 1
+    assignment_template_table_2_1:
+        name: user
+        database_assignment_template_id: 2
+    assignment_template_table_2_2:
+        name: user_cars
+        database_assignment_template_id: 2
+    assignment_template_table_2_3:
+        name: car
+        database_assignment_template_id: 2
+    assignment_template_table_3_1:
+        name: user
+        database_assignment_template_id: 3
+    assignment_template_table_3_2:
+        name: user_cars
+        database_assignment_template_id: 3
+    assignment_template_table_3_3:
+        name: car
+        database_assignment_template_id: 3
+
+TableColumnAssignmentTemplate:
+    assignment_template_column_1_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 1
+    assignment_template_column_1_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 1
+    assignment_template_column_1_3:
+        name: surname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 1
+    assignment_template_column_1_4:
+        name: pesel
+        type: TEXT
+        length: 500
+        is_null: true
+        table_assignment_template_id: 1
+    assignment_template_column_2_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 2
+    assignment_template_column_2_2:
+        name: user_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 2
+    assignment_template_column_2_3:
+        name: car_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 2
+    assignment_template_column_3_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 3
+    assignment_template_column_3_2:
+        name: brand
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 3
+    assignment_template_column_3_3:
+        name: price
+        type: REAL
+        is_null: false
+        table_assignment_template_id: 3
+    assignment_template_column_4_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 4
+    assignment_template_column_4_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 4
+    assignment_template_column_4_3:
+        name: surname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 4
+    assignment_template_column_4_4:
+        name: pesel
+        type: TEXT
+        length: 500
+        is_null: true
+        table_assignment_template_id: 4
+    assignment_template_column_5_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 5
+    assignment_template_column_5_2:
+        name: user_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 5
+    assignment_template_column_5_3:
+        name: car_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 5
+    assignment_template_column_6_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 6
+    assignment_template_column_6_2:
+        name: brand
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 6
+    assignment_template_column_6_3:
+        name: price
+        type: REAL
+        is_null: false
+        table_assignment_template_id: 6
+    assignment_template_column_7_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 7
+    assignment_template_column_7_2:
+        name: name
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 7
+    assignment_template_column_7_3:
+        name: surname
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 7
+    assignment_template_column_7_4:
+        name: pesel
+        type: TEXT
+        length: 500
+        is_null: true
+        table_assignment_template_id: 7
+    assignment_template_column_8_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 8
+    assignment_template_column_8_2:
+        name: user_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 8
+    assignment_template_column_8_3:
+        name: car_id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 8
+    assignment_template_column_9_1:
+        name: id
+        type: INTEGER
+        length: 11
+        is_null: false
+        table_assignment_template_id: 9
+    assignment_template_column_9_2:
+        name: brand
+        type: TEXT
+        length: 500
+        is_null: false
+        table_assignment_template_id: 9
+    assignment_template_column_9_3:
+        name: price
+        type: REAL
+        is_null: false
+        table_assignment_template_id: 9
+        
+TableRelationAssignmentTemplate:
+    assignment_template_relation_1:
+        name: user_cars_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 1
+        relation_column_name: user_id
+        relation_table_id: 2
+    assignment_template_relation_2:
+        name: car_users_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 3
+        relation_column_name: car_id
+        relation_table_id: 2
+    assignment_template_relation_3:
+        name: user_cars_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 4
+        relation_column_name: user_id
+        relation_table_id: 5
+    assignment_template_relation_4:
+        name: car_users_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 6
+        relation_column_name: car_id
+        relation_table_id: 5
+    assignment_template_relation_5:
+        name: user_cars_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 7
+        relation_column_name: user_id
+        relation_table_id: 8
+    assignment_template_relation_6:
+        name: car_users_fk
+        action: CASCADE
+        table_column_name: id
+        table_id: 9
+        relation_column_name: car_id
+        relation_table_id: 8
+
+TableColumnDataTemplate:
+    assignment_table_column_1_1_1:
+        value: "1"
+        table_column_assignment_template_id: 1
+    assignment_table_column_1_2_2:
+        value: Mark
+        table_column_assignment_template_id: 2
+    assignment_table_column_1_3_3:
+        value: Redfield
+        table_column_assignment_template_id: 3
+    assignment_table_column_1_4_4:
+        value: "98090907222"
+        table_column_assignment_template_id: 4
+    assignment_table_column_1_1_5:
+        value: "2"
+        table_column_assignment_template_id: 1
+    assignment_table_column_1_2_6:
+        value: Josh
+        table_column_assignment_template_id: 2
+    assignment_table_column_1_3_7:
+        value: Murdoc
+        table_column_assignment_template_id: 3
+    assignment_table_column_1_4_8:
+        value: "97050304211"
+        table_column_assignment_template_id: 4
+    assignment_table_column_1_5_1:
+        value: "1"
+        table_column_assignment_template_id: 5
+    assignment_table_column_1_6_2:
+        value: "1"
+        table_column_assignment_template_id: 6
+    assignment_table_column_1_7_3:
+        value: "1"
+        table_column_assignment_template_id: 7
+    assignment_table_column_1_5_4:
+        value: "2"
+        table_column_assignment_template_id: 5
+    assignment_table_column_1_6_5:
+        value: "2"
+        table_column_assignment_template_id: 6
+    assignment_table_column_1_7_6:
+        value: "2"
+        table_column_assignment_template_id: 7
+    assignment_table_column_1_8_1:
+        value: "1"
+        table_column_assignment_template_id: 8
+    assignment_table_column_1_9_2:
+        value: Opel
+        table_column_assignment_template_id: 9
+    assignment_table_column_1_10_3:
+        value: "3000"
+        table_column_assignment_template_id: 10
+    assignment_table_column_1_8_4:
+        value: "2"
+        table_column_assignment_template_id: 8
+    assignment_table_column_1_9_5:
+        value: BMW
+        table_column_assignment_template_id: 9
+    assignment_table_column_1_10_6:
+        value: "8000"
+        table_column_assignment_template_id: 10
+    assignment_table_column_2_1_1:
+        value: "1"
+        table_column_assignment_template_id: 11
+    assignment_table_column_2_2_2:
+        value: Mark
+        table_column_assignment_template_id: 12
+    assignment_table_column_2_3_3:
+        value: Redfield
+        table_column_assignment_template_id: 13
+    assignment_table_column_2_4_4:
+        value: "98090907222"
+        table_column_assignment_template_id: 14
+    assignment_table_column_2_1_5:
+        value: "2"
+        table_column_assignment_template_id: 11
+    assignment_table_column_2_2_6:
+        value: Josh
+        table_column_assignment_template_id: 12
+    assignment_table_column_2_3_7:
+        value: Murdoc
+        table_column_assignment_template_id: 13
+    assignment_table_column_2_4_8:
+        value: "97050304211"
+        table_column_assignment_template_id: 14
+    assignment_table_column_2_5_1:
+        value: "1"
+        table_column_assignment_template_id: 15
+    assignment_table_column_2_6_2:
+        value: "1"
+        table_column_assignment_template_id: 16
+    assignment_table_column_2_7_3:
+        value: "1"
+        table_column_assignment_template_id: 17
+    assignment_table_column_2_5_4:
+        value: "2"
+        table_column_assignment_template_id: 15
+    assignment_table_column_2_6_5:
+        value: "2"
+        table_column_assignment_template_id: 16
+    assignment_table_column_2_7_6:
+        value: "2"
+        table_column_assignment_template_id: 17
+    assignment_table_column_2_8_1:
+        value: "1"
+        table_column_assignment_template_id: 18
+    assignment_table_column_2_9_2:
+        value: Opel
+        table_column_assignment_template_id: 19
+    assignment_table_column_2_10_3:
+        value: "3000"
+        table_column_assignment_template_id: 20
+    assignment_table_column_2_8_4:
+        value: "2"
+        table_column_assignment_template_id: 18
+    assignment_table_column_2_9_5:
+        value: BMW
+        table_column_assignment_template_id: 19
+    assignment_table_column_2_10_6:
+        value: "8000"
+        table_column_assignment_template_id: 20
+    assignment_table_column_3_1_1:
+        value: "1"
+        table_column_assignment_template_id: 21
+    assignment_table_column_3_2_2:
+        value: Mark
+        table_column_assignment_template_id: 22
+    assignment_table_column_3_3_3:
+        value: Redfield
+        table_column_assignment_template_id: 23
+    assignment_table_column_3_4_4:
+        value: "98090907222"
+        table_column_assignment_template_id: 24
+    assignment_table_column_3_1_5:
+        value: "2"
+        table_column_assignment_template_id: 21
+    assignment_table_column_3_2_6:
+        value: Josh
+        table_column_assignment_template_id: 22
+    assignment_table_column_3_3_7:
+        value: Murdoc
+        table_column_assignment_template_id: 23
+    assignment_table_column_3_4_8:
+        value: "97050304211"
+        table_column_assignment_template_id: 24
+    assignment_table_column_3_5_1:
+        value: "1"
+        table_column_assignment_template_id: 25
+    assignment_table_column_3_6_2:
+        value: "1"
+        table_column_assignment_template_id: 26
+    assignment_table_column_3_7_3:
+        value: "1"
+        table_column_assignment_template_id: 27
+    assignment_table_column_3_5_4:
+        value: "2"
+        table_column_assignment_template_id: 25
+    assignment_table_column_3_6_5:
+        value: "2"
+        table_column_assignment_template_id: 26
+    assignment_table_column_3_7_6:
+        value: "2"
+        table_column_assignment_template_id: 27
+    assignment_table_column_3_8_1:
+        value: "1"
+        table_column_assignment_template_id: 28
+    assignment_table_column_3_9_2:
+        value: Opel
+        table_column_assignment_template_id: 29
+    assignment_table_column_3_10_3:
+        value: "3000"
+        table_column_assignment_template_id: 30
+    assignment_table_column_3_8_4:
+        value: "2"
+        table_column_assignment_template_id: 28
+    assignment_table_column_3_9_5:
+        value: BMW
+        table_column_assignment_template_id: 29
+    assignment_table_column_3_10_6:
+        value: "8000"
+        table_column_assignment_template_id: 30
 
 AssignmentTag:
     assignment_tag_1:
@@ -132,9 +561,6 @@ AssignmentTag:
     assignment_tag_3:
         tag_id: 3
         assignment_id: 3
-    assignment_tag_4:
-        tag_id: 4
-        assignment_id: 4
 
 QueryHistory:
     query_history_1:
@@ -165,14 +591,6 @@ QueryHistory:
         query: SELECT * FROM users
         is_valid: true
         assignment_id: 3
-    query_history_8:
-        query: SELECT * FROM
-        is_valid: false
-        assignment_id: 4
-    query_history_9:
-        query: SELECT * FROM users
-        is_valid: true
-        assignment_id: 4
 
 Database:
     public_database_1:
