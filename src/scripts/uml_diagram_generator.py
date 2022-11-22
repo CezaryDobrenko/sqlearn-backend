@@ -6,7 +6,7 @@ graph = create_schema_graph(
     metadata=metadata,
     show_datatypes=True,
     show_indexes=False,
-    rankdir="LR",
+    rankdir="TB",
     concentrate=False,
     relation_options={
         "fontsize": "7",
