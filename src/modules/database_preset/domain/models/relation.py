@@ -13,11 +13,14 @@ class RelationAction(enum.Enum):
     CASCADE = "CASCADE"
 
 
+RELATION_ACTION = Enum(RelationAction)
+
+
 class TableRelation(BaseModel):
     __tablename__ = "table_relation"
 
     name: str = Column(String(500))
-    action: str = Column(Enum(RelationAction), nullable=False)
+    action: str = Column(RELATION_ACTION, nullable=False)
 
     relation_column_name: str = Column(String(500))
     relation_table_id: int = Column(

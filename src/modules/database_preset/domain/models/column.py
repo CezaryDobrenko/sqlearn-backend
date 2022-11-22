@@ -14,11 +14,14 @@ class ColumnType(enum.Enum):
     BLOB = "BLOB"
 
 
+COLUMN_TYPE = Enum(ColumnType)
+
+
 class TableColumn(BaseModel):
     __tablename__ = "table_column"
 
     name: str = Column(String(500))
-    type: str = Column(Enum(ColumnType), nullable=False)
+    type: str = Column(COLUMN_TYPE, nullable=False)
     length: int = Column(Integer)
     is_null: bool = Column(Boolean)
     is_unique: bool = Column(Boolean)

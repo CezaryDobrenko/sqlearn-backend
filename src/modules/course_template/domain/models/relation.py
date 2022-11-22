@@ -1,23 +1,15 @@
-import enum
-
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
-
-
-class RelationAction(enum.Enum):
-    NO_ACTION = "NO ACTION"
-    SET_NULL = "SET NULL"
-    SET_DEFAULT = "SET DEFAULT"
-    CASCADE = "CASCADE"
+from modules.database_preset.domain.models.relation import RELATION_ACTION
 
 
 class TableRelationAssignmentTemplate(BaseModel):
     __tablename__ = "table_relation_assignment_template"
 
     name: str = Column(String(500))
-    action: str = Column(Enum(RelationAction), nullable=False)
+    action: str = Column(RELATION_ACTION, nullable=False)
 
     relation_column_name: str = Column(String(500))
     relation_table_id: int = Column(

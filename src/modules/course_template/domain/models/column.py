@@ -1,24 +1,15 @@
-import enum
-
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
-
-
-class ColumnType(enum.Enum):
-    INTEGER = "INTEGER"
-    NUMERIC = "NUMERIC"
-    REAL = "REAL"
-    TEXT = "TEXT"
-    BLOB = "BLOB"
+from modules.database_preset.domain.models.column import COLUMN_TYPE
 
 
 class TableColumnAssignmentTemplate(BaseModel):
     __tablename__ = "table_column_assignment_template"
 
     name: str = Column(String(500))
-    type: str = Column(Enum(ColumnType), nullable=False)
+    type: str = Column(COLUMN_TYPE, nullable=False)
     length: int = Column(Integer)
     is_null: bool = Column(Boolean)
     is_unique: bool = Column(Boolean)

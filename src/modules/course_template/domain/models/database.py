@@ -21,7 +21,12 @@ class DatabaseAssignmentTemplate(BaseModel):
         back_populates="database",
     )
 
-    tables: list = relationship("TableAssignmentTemplate", lazy="dynamic", uselist=True)
+    tables: list = relationship(
+        "TableAssignmentTemplate",
+        lazy="dynamic",
+        uselist=True,
+        passive_deletes=True,
+    )
 
     def __str__(self):
         return f"DatabaseAssignmentTemplate({self.name=})"

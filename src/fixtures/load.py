@@ -12,12 +12,17 @@ from models import (
     Course,
     CourseTemplate,
     Database,
+    DatabaseAssignmentTemplate,
     QueryHistory,
     Quiz,
     QuizTemplate,
     Table,
+    TableAssignmentTemplate,
     TableColumn,
+    TableColumnAssignmentTemplate,
+    TableColumnDataTemplate,
     TableRelation,
+    TableRelationAssignmentTemplate,
     Tag,
     User,
 )
@@ -40,6 +45,11 @@ model_classes = [
     QuizTemplate,
     Tag,
     AssignmentTemplateTag,
+    DatabaseAssignmentTemplate,
+    TableAssignmentTemplate,
+    TableColumnAssignmentTemplate,
+    TableColumnDataTemplate,
+    TableRelationAssignmentTemplate,
 ]
 
 # database conntection config

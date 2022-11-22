@@ -30,6 +30,6 @@ class AssignmentTemplate(BaseModel):
     )
 
     def __str__(self):
-        return f"QuizTemplate({self.ordinal=}, {self.title=})"
+        return f"AssignmentTemplate({self.ordinal=}, {self.title=})"
 
     __repr__ = __str__
