@@ -16,26 +16,13 @@ class AssignmentTemplateManagementService:
         self.database_manager = DatabaseTemplateManager(session)
 
     @authorize_access(QuizTemplate)
-    def create(
-        self, quiz_template_id: int, title: str, database_id: Optional[int], **kwargs
-    ) -> AssignmentTemplate:
+    def create(self, quiz_template_id: int, title: str, **kwargs) -> AssignmentTemplate:
         with transaction_scope(self.session) as session:
             quiz_template = session.query(QuizTemplate).get(quiz_template_id)
             last_assignment = quiz_template.assignments_templates.order_by(
                 AssignmentTemplate.ordinal.desc()
             ).first()
-
-            if last_assignment:
-                ordinal = last_assignment.ordinal + 1
-                base_database = last_assignment.database
-                copy_data = True
-            else:
-                ordinal = 1
-                base_database = session.query(Database).get(database_id)
-                copy_data = False
-
-            if not base_database:
-                raise Exception("Base database not defined!")
+            ordinal = last_assignment.ordinal + 1 if last_assignment else 1
 
             assignment_template = AssignmentTemplate(
                 quiz_template_id=quiz_template_id,
@@ -46,9 +33,10 @@ class AssignmentTemplateManagementService:
             )
             session.add(assignment_template)
 
-            self.database_manager.create_assignment_database(
-                base_database, assignment_template, copy_data
-            )
+            if last_assignment:
+                self.database_manager.create_assignment_database(
+                    last_assignment.database, assignment_template, True
+                )
         return assignment_template
 
     @authorize_access(AssignmentTemplate)

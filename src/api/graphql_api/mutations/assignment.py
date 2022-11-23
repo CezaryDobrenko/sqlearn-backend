@@ -14,7 +14,6 @@ class CreateAssignmentTemplate(Mutation):
     class Arguments:
         quiz_template_id = ID(required=True)
         title = String(required=True)
-        database_id = ID()
         description = String()
         owner_solution = String()
 
@@ -22,15 +21,8 @@ class CreateAssignmentTemplate(Mutation):
     def mutate(self, info, quiz_template_id: str, title: str, **kwargs):
         session = info.context["session"]
         quiz_template_pk = retrieve_id(quiz_template_id)
-        database_pk = (
-            retrieve_id(kwargs.pop("database_id", None))
-            if "database_id" in kwargs
-            else None
-        )
         manager = AssignmentTemplateManagementService(session)
-        assignment_template = manager.create(
-            quiz_template_pk, title, database_pk, **kwargs
-        )
+        assignment_template = manager.create(quiz_template_pk, title, **kwargs)
         return CreateAssignmentTemplate(assignment_template=assignment_template)
 
 
