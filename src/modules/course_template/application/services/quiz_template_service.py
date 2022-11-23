@@ -1,5 +1,4 @@
 from instance_access import authorize_access
-from jwt_token import JWTService
 from models.utils import get_or_create, transaction_scope
 from modules.course_template.domain.models.quiz import QuizTemplate
 
@@ -7,7 +6,6 @@ from modules.course_template.domain.models.quiz import QuizTemplate
 class QuizTemplateManagementService:
     def __init__(self, session):
         self.session = session
-        self.jwt_service = JWTService()
 
     def create(self, course_template_id: int, title: str, **kwargs) -> QuizTemplate:
         with transaction_scope(self.session) as session:

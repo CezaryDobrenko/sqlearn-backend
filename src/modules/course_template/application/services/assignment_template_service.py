@@ -1,7 +1,6 @@
 from typing import Optional
 
 from instance_access import authorize_access
-from jwt_token import JWTService
 from models.utils import transaction_scope
 from modules.course_template.application.managers.database_template_manager import (
     DatabaseTemplateManager,
@@ -14,7 +13,6 @@ from modules.database_preset.domain.models.database import Database
 class AssignmentTemplateManagementService:
     def __init__(self, session):
         self.session = session
-        self.jwt_service = JWTService()
         self.database_manager = DatabaseTemplateManager(session)
 
     @authorize_access(QuizTemplate)

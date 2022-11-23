@@ -3,6 +3,7 @@ extend-ignore=
     E402,
     E501,
     E722,
+    E203,
     W503,
     F405,
 extend-exclude=

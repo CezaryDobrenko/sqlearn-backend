@@ -4,6 +4,7 @@ from factory.alchemy import SQLAlchemyModelFactory
 
 from models import User
 from modules.course_template.domain.models.assignment import AssignmentTemplate
+from modules.course_template.domain.models.assignment_tag import AssignmentTemplateTag
 from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 from modules.course_template.domain.models.column_data import TableColumnDataTemplate
 from modules.course_template.domain.models.course import CourseTemplate
@@ -13,6 +14,7 @@ from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
 from modules.course_template.domain.models.table import TableAssignmentTemplate
+from modules.course_template.domain.models.tag import Tag
 from modules.database_preset.domain.models.column import ColumnType, TableColumn
 from modules.database_preset.domain.models.database import Database
 from modules.database_preset.domain.models.relation import RelationAction, TableRelation
@@ -57,6 +59,23 @@ class AssignmentTemplateFactory(SQLAlchemyModelFactory):
 
     class Meta:
         model = AssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
+class TagFactory(SQLAlchemyModelFactory):
+    name = factory.Sequence(lambda n: f"tag-{n}")
+
+    class Meta:
+        model = Tag
+        sqlalchemy_session_persistence = "flush"
+
+
+class AssignmentTemplateTagFactory(SQLAlchemyModelFactory):
+    assignment_template = SubFactory(AssignmentTemplateFactory)
+    tag = SubFactory(TagFactory)
+
+    class Meta:
+        model = AssignmentTemplateTag
         sqlalchemy_session_persistence = "flush"
 
 

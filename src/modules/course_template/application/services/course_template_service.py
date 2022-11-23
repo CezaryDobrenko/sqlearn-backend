@@ -1,5 +1,4 @@
 from instance_access import authorize_access
-from jwt_token import JWTService
 from models.utils import get_or_create, transaction_scope
 from modules.course_template.domain.models.course import CourseTemplate
 
@@ -7,7 +6,6 @@ from modules.course_template.domain.models.course import CourseTemplate
 class CourseTemplateManagementService:
     def __init__(self, session):
         self.session = session
-        self.jwt_service = JWTService()
 
     def create(self, name: str, **kwargs) -> CourseTemplate:
         user = kwargs["current_user"]

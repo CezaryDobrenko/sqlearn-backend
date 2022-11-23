@@ -14,6 +14,7 @@ from jwt_token import JWTService
 from models.base_model import AbstractModel
 from tests.factories import (
     AssignmentTemplateFactory,
+    AssignmentTemplateTagFactory,
     CourseTemplateFactory,
     DatabaseAssignmentTemplateFactory,
     DatabaseFactory,
@@ -25,6 +26,7 @@ from tests.factories import (
     TableFactory,
     TableRelationAssignmentTemplateFactory,
     TableRelationFactory,
+    TagFactory,
     UserFactory,
 )
 
@@ -41,6 +43,8 @@ register(TableAssignmentTemplateFactory)
 register(TableColumnAssignmentTemplateFactory)
 register(TableRelationAssignmentTemplateFactory)
 register(TableColumnDataTemplateFactory)
+register(AssignmentTemplateTagFactory)
+register(TagFactory)
 
 
 class RequestFactory:
@@ -91,6 +95,8 @@ def db_session(db_connection):
         TableColumnAssignmentTemplateFactory,
         TableRelationAssignmentTemplateFactory,
         TableColumnDataTemplateFactory,
+        AssignmentTemplateTagFactory,
+        TagFactory,
     ]
     for factory in factories:
         factory._meta.sqlalchemy_session = db_session
