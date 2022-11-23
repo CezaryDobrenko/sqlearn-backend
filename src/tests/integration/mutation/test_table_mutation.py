@@ -3,7 +3,7 @@ from modules.database_preset.domain.models.table import Table
 from tests.utils import authenticated_request, gid
 
 
-def test_create_database_mutation(
+def test_create_table_mutation(
     db_session, graphql_client, user_factory, database_factory
 ):
     user = user_factory()

@@ -24,20 +24,16 @@ def test_create_assignment_template_when_first_assignment_mutation(
     description = "new_description"
     owner_solution = "SELECT * FROM users"
 
-    preset_database = build_preset_database(user)
-
     query = """
         mutation createAssignmentTemplate(
             $quizTemplateId: ID!,
             $title: String!,
-            $databaseId: ID,
             $description: String,
             $ownerSolution: String
         ){
             createAssignmentTemplate(
                 quizTemplateId: $quizTemplateId,
                 title: $title,
-                databaseId: $databaseId,
                 description: $description,
                 ownerSolution: $ownerSolution
             ){
@@ -51,7 +47,6 @@ def test_create_assignment_template_when_first_assignment_mutation(
     """
     variables = {
         "quizTemplateId": gid(quiz_template),
-        "databaseId": gid(preset_database),
         "title": title,
         "description": description,
         "ownerSolution": owner_solution,
@@ -73,17 +68,9 @@ def test_create_assignment_template_when_first_assignment_mutation(
     )
 
     assignment_templates = db_session.query(AssignmentTemplate)
-    database_templates = db_session.query(DatabaseAssignmentTemplate)
-    table_templates = db_session.query(TableAssignmentTemplate)
-    column_templates = db_session.query(TableColumnAssignmentTemplate)
-    relation_templates = db_session.query(TableRelationAssignmentTemplate)
     assert not response.get("errors")
     assert response["data"] == expected
     assert assignment_templates.count() == 1
-    assert database_templates.count() == 1
-    assert table_templates.count() == 2
-    assert column_templates.count() == 5
-    assert relation_templates.count() == 1
 
 
 def test_create_assignment_template_when_next_assignment_mutation(
@@ -109,14 +96,12 @@ def test_create_assignment_template_when_next_assignment_mutation(
         mutation createAssignmentTemplate(
             $quizTemplateId: ID!,
             $title: String!,
-            $databaseId: ID,
             $description: String,
             $ownerSolution: String
         ){
             createAssignmentTemplate(
                 quizTemplateId: $quizTemplateId,
                 title: $title,
-                databaseId: $databaseId,
                 description: $description,
                 ownerSolution: $ownerSolution
             ){
@@ -130,7 +115,6 @@ def test_create_assignment_template_when_next_assignment_mutation(
     """
     variables = {
         "quizTemplateId": gid(quiz_template),
-        "databaseId": None,
         "title": title,
         "description": description,
         "ownerSolution": owner_solution,

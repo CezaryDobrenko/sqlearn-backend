@@ -5,12 +5,12 @@ def test_authorized_node_course_templates_query(
     db_session, graphql_client, user_factory, course_template_factory
 ):
     user = user_factory()
-    tempate_1 = course_template_factory(
-        name="template_1", is_public=True, is_published=False, owner=user
+    tempate = course_template_factory(
+        name="template", is_public=True, is_published=False
     )
 
     query = """
-        query courseTemplate($id: ID!){
+        query user($id: ID!){
             authorizedNode(id: $id){
                 ...on CourseTemplateNode{
                     id
@@ -22,11 +22,13 @@ def test_authorized_node_course_templates_query(
             }
         }
     """
-    variables = {"id": gid(tempate_1)}
+    variables = {"id": gid(tempate)}
     expected = {"authorizedNode": None}
 
     response = graphql_client.execute(
-        query, variables=variables, context_value={"session": db_session, "request": {}}
+        query,
+        variables=variables,
+        context_value={"session": db_session, "request": authenticated_request(user)},
     )
 
     assert not response.get("errors")
@@ -43,27 +45,28 @@ def test_user_course_templates_query(
     tempate_2 = course_template_factory(
         name="template_2", is_public=False, is_published=True, owner=user
     )
-    other_user = user_factory()
-    _ = course_template_factory(name="template_3", owner=other_user)
 
     query = """
-        query user{
-            user{
-                courseTemplates{
-                    edges{
-                        node{
-                            name
-                            description
-                            isPublic
-                            isPublished
+        query user($id: ID!){
+            authorizedNode(id: $id){
+                ...on UserNode{
+                    courseTemplates{
+                        edges{
+                            node{
+                                name
+                                description
+                                isPublic
+                                isPublished
+                            }
                         }
                     }
                 }
             }
         }
     """
+    variables = {"id": gid(user)}
     expected = {
-        "user": {
+        "authorizedNode": {
             "courseTemplates": {
                 "edges": [
                     {
@@ -89,6 +92,7 @@ def test_user_course_templates_query(
 
     response = graphql_client.execute(
         query,
+        variables=variables,
         context_value={"session": db_session, "request": authenticated_request(user)},
     )
 

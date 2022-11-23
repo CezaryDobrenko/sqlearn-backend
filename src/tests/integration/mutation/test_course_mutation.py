@@ -15,9 +15,7 @@ def test_create_course_template_mutation(db_session, graphql_client, user_factor
                 courseTemplate{
                     name
                     description
-                    owner{
-                        email
-                    }
+                    ownerId
                 }
             }
         }
@@ -28,7 +26,7 @@ def test_create_course_template_mutation(db_session, graphql_client, user_factor
             "courseTemplate": {
                 "name": template_name,
                 "description": template_description,
-                "owner": {"email": user.email},
+                "ownerId": gid(user),
             }
         }
     }
@@ -61,9 +59,7 @@ def test_update_course_template_mutation(
                 courseTemplate{
                     name
                     description
-                    owner{
-                        email
-                    }
+                    ownerId
                 }
             }
         }
@@ -78,7 +74,7 @@ def test_update_course_template_mutation(
             "courseTemplate": {
                 "name": new_template_name,
                 "description": new_template_description,
-                "owner": {"email": user.email},
+                "ownerId": gid(user),
             }
         }
     }

@@ -104,3 +104,41 @@ def test_public_databases_query(
 
     assert not response.get("errors")
     assert response["data"] == expected
+
+
+def test_public_databases_query(db_session, graphql_client, tag_factory):
+    tag_1 = tag_factory(name="DCL")
+    tag_2 = tag_factory(name="DQL")
+    tag_3 = tag_factory(name="DML")
+    tag_4 = tag_factory(name="DDL")
+
+    query = """
+        query publicTags{
+            public{
+                tags{
+                    edges{
+                        node{
+                            name
+                        }
+                    }
+                }
+            }
+        }
+    """
+    expected = {
+        "public": {
+            "tags": {
+                "edges": [
+                    {"node": {"name": tag_1.name}},
+                    {"node": {"name": tag_2.name}},
+                    {"node": {"name": tag_3.name}},
+                    {"node": {"name": tag_4.name}},
+                ]
+            }
+        }
+    }
+
+    response = graphql_client.execute(query, context_value={"session": db_session})
+
+    assert not response.get("errors")
+    assert response["data"] == expected
