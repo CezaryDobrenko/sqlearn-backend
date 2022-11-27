@@ -14,7 +14,7 @@ from tests.factories import (
 )
 
 
-def build_assignment_database(assignment_template: AssignmentTemplate):
+def build_assignment_template_database(assignment_template: AssignmentTemplate):
     database = DatabaseAssignmentTemplateFactory(
         assignment_template=assignment_template
     )

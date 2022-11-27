@@ -50,6 +50,7 @@ class AssignmentTemplateManagementService:
             assignment_template.update(**kwargs)
             if database_id:
                 session.delete(assignment_template.database)
+                session.commit()
                 base_database = session.query(Database).get(database_id)
                 self.database_manager.create_assignment_database(
                     base_database, assignment_template, False

@@ -13,7 +13,8 @@ class DatabaseAssignmentTemplate(BaseModel):
         Integer(),
         ForeignKey("assignment_template.id", ondelete="CASCADE"),
         index=True,
-        nullable=True,
+        nullable=False,
+        unique=True,
     )
     assignment_template = relationship(
         "AssignmentTemplate",

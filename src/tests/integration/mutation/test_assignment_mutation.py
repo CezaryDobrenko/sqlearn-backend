@@ -6,7 +6,7 @@ from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
 from modules.course_template.domain.models.table import TableAssignmentTemplate
-from tests.builders import build_assignment_database, build_preset_database
+from tests.builders import build_assignment_template_database, build_preset_database
 from tests.utils import authenticated_request, gid
 
 
@@ -87,7 +87,7 @@ def test_create_assignment_template_when_next_assignment_mutation(
     assignment_template = assignment_template_factory(
         quiz_template=quiz_template, ordinal=1
     )
-    build_assignment_database(assignment_template)
+    build_assignment_template_database(assignment_template)
     title = "next_assigment_title"
     description = "next_assigment_description"
     owner_solution = "next_assigment_owner_solution"
@@ -169,7 +169,7 @@ def test_update_assignment_template_when_next_assignment_mutation(
         description="old_description",
         owner_solution="old_owner_solution",
     )
-    build_assignment_database(assignment_template)
+    build_assignment_template_database(assignment_template)
     new_title = "new_assigment_title"
     new_description = "next_assigment_description"
     new_owner_solution = "next_assigment_owner_solution"
@@ -251,7 +251,7 @@ def test_remove_assignment_template_when_next_assignment_mutation(
         description="old_description",
         owner_solution="old_owner_solution",
     )
-    build_assignment_database(assignment_template)
+    build_assignment_template_database(assignment_template)
 
     query = """
         mutation removeAssignmentTemplate($assignmentTemplateId: ID!){

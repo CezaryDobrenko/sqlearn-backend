@@ -48,6 +48,7 @@ class TableNode(SQLAlchemyObjectType):
 
     columns = SQLAlchemyConnectionField(TableColumnNode)
     relations = SQLAlchemyConnectionField(TableRelationNode)
+    related_by = SQLAlchemyConnectionField(TableRelationNode)
 
 
 class TableAssignmentTemplateNode(SQLAlchemyObjectType):
@@ -59,6 +60,7 @@ class TableAssignmentTemplateNode(SQLAlchemyObjectType):
     rows = relay.ConnectionField(TableRowConnection)
     columns = SQLAlchemyConnectionField(TableColumnAssignmentTemplateNode)
     relations = SQLAlchemyConnectionField(TableRelationAssignmentTemplateNode)
+    related_by = SQLAlchemyConnectionField(TableRelationAssignmentTemplateNode)
 
     def resolve_rows(self, info, **kwargs):
         return TableRowNode.from_template(self)
