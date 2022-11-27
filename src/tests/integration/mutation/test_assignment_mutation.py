@@ -228,9 +228,9 @@ def test_update_assignment_template_when_next_assignment_mutation(
     assert not response.get("errors")
     assert response["data"] == expected
     assert database_templates.count() == 1
-    assert table_templates.count() == 2
-    assert column_templates.count() == 5
-    assert relation_templates.count() == 1
+    assert table_templates.count() == 3
+    assert column_templates.count() == 8
+    assert relation_templates.count() == 2
 
 
 def test_remove_assignment_template_when_next_assignment_mutation(

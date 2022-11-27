@@ -21,6 +21,7 @@ class TableRelationAssignmentTemplate(BaseModel):
     relation_table = relationship(
         "TableAssignmentTemplate",
         foreign_keys=[relation_table_id],
+        back_populates="related_by",
     )
 
     table_column_name: str = Column(String(500))

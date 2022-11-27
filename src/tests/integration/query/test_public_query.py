@@ -106,7 +106,7 @@ def test_public_databases_query(
     assert response["data"] == expected
 
 
-def test_public_databases_query(db_session, graphql_client, tag_factory):
+def test_public_tags_query(db_session, graphql_client, tag_factory):
     tag_1 = tag_factory(name="DCL")
     tag_2 = tag_factory(name="DQL")
     tag_3 = tag_factory(name="DML")

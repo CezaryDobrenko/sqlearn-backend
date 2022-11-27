@@ -1,5 +1,6 @@
 from modules.database_preset.domain.models.relation import TableRelation
 from modules.database_preset.domain.models.table import Table
+from tests.builders import build_preset_database
 from tests.utils import authenticated_request, gid
 
 
@@ -146,3 +147,32 @@ def test_remove_table_mutation(
     assert response["data"] == expected
     assert tables.count() == 1
     assert relations.count() == 0
+
+
+def test_remove_table_with_relation_and_related_by_mutation(
+    db_session, graphql_client, user_factory
+):
+    user = user_factory()
+    preset_database = build_preset_database(user)
+    _, table_to_delete, _ = preset_database.tables.all()
+
+    query = """
+        mutation removeTable($tableId: ID!){
+            removeTable(tableId: $tableId){
+                isRemoved
+            }
+        }
+    """
+    variables = {"tableId": gid(table_to_delete)}
+    expected = {"removeTable": {"isRemoved": True}}
+
+    response = graphql_client.execute(
+        query,
+        variables=variables,
+        context_value={"session": db_session, "request": authenticated_request(user)},
+    )
+
+    assert not response.get("errors")
+    assert response["data"] == expected
+    assert db_session.query(Table).count() == 2
+    assert db_session.query(TableRelation).count() == 0

@@ -32,6 +32,13 @@ class TableAssignmentTemplate(BaseModel):
         primaryjoin="TableAssignmentTemplate.id == TableRelationAssignmentTemplate.table_id",
         passive_deletes=True,
     )
+    related_by: list = relationship(
+        "TableRelationAssignmentTemplate",
+        lazy="dynamic",
+        uselist=True,
+        primaryjoin="TableAssignmentTemplate.id == TableRelationAssignmentTemplate.relation_table_id",
+        passive_deletes=True,
+    )
 
     def __str__(self):
         return f"TableAssignmentTemplate({self.name=})"

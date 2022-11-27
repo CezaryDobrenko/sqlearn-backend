@@ -28,6 +28,13 @@ class Table(BaseModel):
         primaryjoin="Table.id == TableRelation.table_id",
         passive_deletes=True,
     )
+    related_by: list = relationship(
+        "TableRelation",
+        lazy="dynamic",
+        uselist=True,
+        primaryjoin="Table.id == TableRelation.relation_table_id",
+        passive_deletes=True,
+    )
 
     def __str__(self):
         return f"Table({self.name=})"

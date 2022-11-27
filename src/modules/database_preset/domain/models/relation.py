@@ -29,7 +29,9 @@ class TableRelation(BaseModel):
         index=True,
         nullable=False,
     )
-    relation_table = relationship("Table", foreign_keys=[relation_table_id])
+    relation_table = relationship(
+        "Table", foreign_keys=[relation_table_id], back_populates="related_by"
+    )
 
     table_column_name: str = Column(String(500))
     table_id: int = Column(
