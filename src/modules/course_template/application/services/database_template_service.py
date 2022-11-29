@@ -13,6 +13,18 @@ class DatabaseAssignmentTemplateManagementService:
         self, assignment_template_id: int, name: str, **kwargs
     ) -> DatabaseAssignmentTemplate:
         with transaction_scope(self.session) as session:
+            is_database_exist = (
+                session.query(DatabaseAssignmentTemplate)
+                .filter(
+                    DatabaseAssignmentTemplate.assignment_template_id
+                    == assignment_template_id
+                )
+                .first()
+            )
+
+            if is_database_exist:
+                raise Exception("Schema already defined for assignment template!")
+
             database, _ = get_or_create(
                 session,
                 DatabaseAssignmentTemplate,

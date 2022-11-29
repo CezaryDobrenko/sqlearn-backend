@@ -23,7 +23,10 @@ class TableAssignmentTemplate(BaseModel):
     )
 
     columns: list = relationship(
-        "TableColumnAssignmentTemplate", lazy="dynamic", uselist=True
+        "TableColumnAssignmentTemplate",
+        lazy="dynamic",
+        uselist=True,
+        passive_deletes=True,
     )
     relations: list = relationship(
         "TableRelationAssignmentTemplate",
