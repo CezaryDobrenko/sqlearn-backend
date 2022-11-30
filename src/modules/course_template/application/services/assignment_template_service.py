@@ -34,9 +34,10 @@ class AssignmentTemplateManagementService:
             session.add(assignment_template)
 
             if last_assignment:
-                self.database_manager.create_assignment_database(
-                    last_assignment.database, assignment_template, True
-                )
+                if assignment_database := last_assignment.database:
+                    self.database_manager.create_assignment_database(
+                        assignment_database, assignment_template, True
+                    )
         return assignment_template
 
     @authorize_access(AssignmentTemplate)
