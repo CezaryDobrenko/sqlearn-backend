@@ -68,9 +68,11 @@ def test_create_assignment_template_when_first_assignment_mutation(
     )
 
     assignment_templates = db_session.query(AssignmentTemplate)
+    assignment_databases = db_session.query(DatabaseAssignmentTemplate)
     assert not response.get("errors")
     assert response["data"] == expected
     assert assignment_templates.count() == 1
+    assert assignment_databases.count() == 1
 
 
 def test_create_assignment_template_when_next_assignment_mutation(
@@ -151,7 +153,7 @@ def test_create_assignment_template_when_next_assignment_mutation(
     assert relation_templates.count() == 1 * 2
 
 
-def test_update_assignment_template_when_next_assignment_mutation(
+def test_update_assignment_template_mutation(
     db_session,
     graphql_client,
     user_factory,
@@ -233,7 +235,7 @@ def test_update_assignment_template_when_next_assignment_mutation(
     assert relation_templates.count() == 2
 
 
-def test_remove_assignment_template_when_next_assignment_mutation(
+def test_remove_assignment_template_mutation(
     db_session,
     graphql_client,
     user_factory,
@@ -283,3 +285,42 @@ def test_remove_assignment_template_when_next_assignment_mutation(
     assert column_templates.count() == 0
     assert relation_templates.count() == 0
     assert data_templates.count() == 0
+
+
+def test_remove_assignment_template_without_database_mutation(
+    db_session,
+    graphql_client,
+    user_factory,
+    course_template_factory,
+    quiz_template_factory,
+    assignment_template_factory,
+):
+    user = user_factory()
+    course_template = course_template_factory(owner=user)
+    quiz_template = quiz_template_factory(course_template=course_template)
+    assignment_template = assignment_template_factory(
+        quiz_template=quiz_template,
+        ordinal=1,
+        title="old_title",
+        description="old_description",
+        owner_solution="old_owner_solution",
+    )
+
+    query = """
+        mutation removeAssignmentTemplate($assignmentTemplateId: ID!){
+            removeAssignmentTemplate(assignmentTemplateId: $assignmentTemplateId,){
+                isRemoved
+            }
+        }
+    """
+    variables = {"assignmentTemplateId": gid(assignment_template)}
+    expected = {"removeAssignmentTemplate": {"isRemoved": True}}
+
+    response = graphql_client.execute(
+        query,
+        variables=variables,
+        context_value={"session": db_session, "request": authenticated_request(user)},
+    )
+
+    assert not response.get("errors")
+    assert response["data"] == expected

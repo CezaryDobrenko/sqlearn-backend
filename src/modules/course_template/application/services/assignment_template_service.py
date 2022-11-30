@@ -32,12 +32,12 @@ class AssignmentTemplateManagementService:
                 owner_solution=kwargs.get("owner_solution"),
             )
             session.add(assignment_template)
-
-            if last_assignment:
-                if assignment_database := last_assignment.database:
-                    self.database_manager.create_assignment_database(
-                        assignment_database, assignment_template, True
-                    )
+            prev_database, copy_data = (
+                (last_assignment.database, True) if last_assignment else (None, False)
+            )
+            self.database_manager.create_assignment_database(
+                prev_database, assignment_template, copy_data
+            )
         return assignment_template
 
     @authorize_access(AssignmentTemplate)
@@ -64,6 +64,7 @@ class AssignmentTemplateManagementService:
             assignment_template = session.query(AssignmentTemplate).get(
                 assignment_template_id
             )
-            session.delete(assignment_template.database)
+            if assignment_template.database:
+                session.delete(assignment_template.database)
             session.delete(assignment_template)
         return True

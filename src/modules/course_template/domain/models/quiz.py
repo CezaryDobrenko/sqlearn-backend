@@ -23,7 +23,7 @@ class QuizTemplate(BaseModel):
     )
 
     assignments_templates: list = relationship(
-        "AssignmentTemplate", lazy="dynamic", uselist=True
+        "AssignmentTemplate", lazy="dynamic", uselist=True, passive_deletes=True
     )
 
     def __str__(self):

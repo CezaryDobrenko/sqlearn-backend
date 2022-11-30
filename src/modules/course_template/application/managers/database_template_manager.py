@@ -24,17 +24,19 @@ class DatabaseTemplateManager:
         assignment_template: AssignmentTemplate,
         copy_data: bool,
     ) -> DatabaseAssignmentTemplate:
-        if not base_database:
-            raise Exception("Base database is not defined")
-
-        assignment_database, table_mapper = self._copy_database_schema(
-            base_database,
-            assignment_template,
-            copy_data,
-        )
-        relations = self._copy_database_relations(base_database, table_mapper)
-        for assignment_relation, _ in relations:
-            self.session.add(assignment_relation)
+        if base_database:
+            assignment_database, table_mapper = self._copy_database_schema(
+                base_database,
+                assignment_template,
+                copy_data,
+            )
+            relations = self._copy_database_relations(base_database, table_mapper)
+            for assignment_relation, _ in relations:
+                self.session.add(assignment_relation)
+        else:
+            assignment_database = DatabaseAssignmentTemplate(
+                name="Database", assignment_template=assignment_template
+            )
         return assignment_database
 
     def _copy_database_schema(

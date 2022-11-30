@@ -2,6 +2,7 @@ import datetime
 
 from modules.course_template.domain.models.course import CourseTemplate
 from tests.utils import authenticated_request, gid
+from tests.builders import build_assignment_template_database
 
 
 def test_create_course_template_mutation(db_session, graphql_client, user_factory):
@@ -95,10 +96,18 @@ def test_update_course_template_mutation(
 
 
 def test_remove_course_template_mutation(
-    db_session, graphql_client, user_factory, course_template_factory
+    db_session,
+    graphql_client,
+    user_factory,
+    course_template_factory,
+    quiz_template_factory,
+    assignment_template_factory,
 ):
     user = user_factory()
     course_template = course_template_factory(owner=user)
+    quiz_template = quiz_template_factory(course_template=course_template)
+    assignment_template = assignment_template_factory(quiz_template=quiz_template)
+    build_assignment_template_database(assignment_template)
 
     query = """
         mutation removeCourseTemplate($courseTemplateId: ID!){

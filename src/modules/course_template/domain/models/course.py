@@ -26,7 +26,9 @@ class CourseTemplate(BaseModel):
         "User", foreign_keys=[owner_id], back_populates="course_templates"
     )
 
-    quiz_templates: list = relationship("QuizTemplate", lazy="dynamic", uselist=True)
+    quiz_templates: list = relationship(
+        "QuizTemplate", lazy="dynamic", uselist=True, passive_deletes=True
+    )
 
     def __str__(self):
         return f"CourseTemplate({self.name=}, {self.owner=})"
