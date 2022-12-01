@@ -6,8 +6,11 @@ from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
 from modules.course_template.domain.models.table import TableAssignmentTemplate
+from modules.database_preset.domain.models.column import TableColumn
 from modules.database_preset.domain.models.database import Database
-from tests.builders import build_assignment_template_database
+from modules.database_preset.domain.models.relation import TableRelation
+from modules.database_preset.domain.models.table import Table
+from tests.builders import build_assignment_template_database, build_preset_database
 from tests.utils import authenticated_request, gid
 
 
@@ -93,7 +96,7 @@ def test_remove_database_mutation(
     db_session, graphql_client, user_factory, database_factory
 ):
     user = user_factory()
-    database = database_factory(user=user)
+    database = build_preset_database(user)
 
     query = """
         mutation removeDatabase($databaseId: ID!){
@@ -112,9 +115,15 @@ def test_remove_database_mutation(
     )
 
     databases = db_session.query(Database)
+    tables = db_session.query(Table)
+    columns = db_session.query(TableColumn)
+    relations = db_session.query(TableRelation)
     assert not response.get("errors")
     assert response["data"] == expected
     assert databases.count() == 0
+    assert tables.count() == 0
+    assert columns.count() == 0
+    assert relations.count() == 0
 
 
 def test_create_database_assignment_template_mutation(

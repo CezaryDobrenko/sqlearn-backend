@@ -1,4 +1,5 @@
 from modules.course_template.domain.models.assignment import AssignmentTemplate
+from modules.course_template.domain.models.assignment_tag import AssignmentTemplateTag
 from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 from modules.course_template.domain.models.column_data import TableColumnDataTemplate
 from modules.course_template.domain.models.database import DatabaseAssignmentTemplate
@@ -242,6 +243,7 @@ def test_remove_assignment_template_mutation(
     course_template_factory,
     quiz_template_factory,
     assignment_template_factory,
+    assignment_template_tag_factory,
 ):
     user = user_factory()
     course_template = course_template_factory(owner=user)
@@ -253,6 +255,8 @@ def test_remove_assignment_template_mutation(
         description="old_description",
         owner_solution="old_owner_solution",
     )
+    _ = assignment_template_tag_factory(assignment_template=assignment_template)
+    _ = assignment_template_tag_factory(assignment_template=assignment_template)
     build_assignment_template_database(assignment_template)
 
     query = """
@@ -272,6 +276,7 @@ def test_remove_assignment_template_mutation(
     )
 
     asignment_templates = db_session.query(AssignmentTemplate)
+    tag_templates = db_session.query(AssignmentTemplateTag)
     database_templates = db_session.query(DatabaseAssignmentTemplate)
     table_templates = db_session.query(TableAssignmentTemplate)
     column_templates = db_session.query(TableColumnAssignmentTemplate)
@@ -280,6 +285,7 @@ def test_remove_assignment_template_mutation(
     assert not response.get("errors")
     assert response["data"] == expected
     assert asignment_templates.count() == 0
+    assert tag_templates.count() == 0
     assert database_templates.count() == 0
     assert table_templates.count() == 0
     assert column_templates.count() == 0

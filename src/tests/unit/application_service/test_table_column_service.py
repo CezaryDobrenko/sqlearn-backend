@@ -1,9 +1,13 @@
 import pytest
 
 from exceptions import RelationException
+from modules.course_template.application.services.column_template_service import (
+    ColumnAssignmentTemplateManagementService,
+)
 from modules.database_preset.application.services.table_column_service import (
     TableColumnManagementService,
 )
+from tests.builders import build_assignment_template_database
 
 
 def test_update_table_column_when_relation_exists(
@@ -58,6 +62,49 @@ def test_remove_table_column_when_relation_exists(
     )
 
     service = TableColumnManagementService(db_session)
+
+    with pytest.raises(RelationException):
+        service.remove(column.id, **{"current_user": user})
+
+
+def test_update_table_column_assignment_template_when_relation_exists(
+    user_factory,
+    db_session,
+    course_template_factory,
+    quiz_template_factory,
+    assignment_template_factory,
+):
+    user = user_factory()
+    course_template = course_template_factory(owner=user)
+    quiz_template = quiz_template_factory(course_template=course_template)
+    assignment_template = assignment_template_factory(quiz_template=quiz_template)
+    database_template = build_assignment_template_database(assignment_template)
+    _, table = database_template.tables.all()
+    _, _, column = table.columns.all()
+
+    service = ColumnAssignmentTemplateManagementService(db_session)
+
+    with pytest.raises(RelationException):
+        update = {"current_user": user, "name": "other_id"}
+        service.update(column.id, is_relationship=True, **update)
+
+
+def test_remove_table_column_assignment_template_when_relation_exists(
+    user_factory,
+    db_session,
+    course_template_factory,
+    quiz_template_factory,
+    assignment_template_factory,
+):
+    user = user_factory()
+    course_template = course_template_factory(owner=user)
+    quiz_template = quiz_template_factory(course_template=course_template)
+    assignment_template = assignment_template_factory(quiz_template=quiz_template)
+    database_template = build_assignment_template_database(assignment_template)
+    _, table = database_template.tables.all()
+    _, _, column = table.columns.all()
+
+    service = ColumnAssignmentTemplateManagementService(db_session)
 
     with pytest.raises(RelationException):
         service.remove(column.id, **{"current_user": user})

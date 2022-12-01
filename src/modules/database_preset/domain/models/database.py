@@ -17,7 +17,9 @@ class Database(BaseModel):
     )
     user = relationship("User", foreign_keys=[user_id], back_populates="databases")
 
-    tables: list = relationship("Table", lazy="dynamic", uselist=True)
+    tables: list = relationship(
+        "Table", lazy="dynamic", uselist=True, passive_deletes=True
+    )
 
     def __str__(self):
         return f"Database({self.name=})"

@@ -20,7 +20,9 @@ class Table(BaseModel):
         "Database", foreign_keys=[database_id], back_populates="tables"
     )
 
-    columns: list = relationship("TableColumn", lazy="dynamic", uselist=True)
+    columns: list = relationship(
+        "TableColumn", lazy="dynamic", uselist=True, passive_deletes=True
+    )
     relations: list = relationship(
         "TableRelation",
         lazy="dynamic",

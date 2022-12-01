@@ -1,4 +1,13 @@
+from modules.course_template.domain.models.assignment import AssignmentTemplate
+from modules.course_template.domain.models.assignment_tag import AssignmentTemplateTag
+from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
+from modules.course_template.domain.models.column_data import TableColumnDataTemplate
+from modules.course_template.domain.models.database import DatabaseAssignmentTemplate
 from modules.course_template.domain.models.quiz import QuizTemplate
+from modules.course_template.domain.models.relation import (
+    TableRelationAssignmentTemplate,
+)
+from modules.course_template.domain.models.table import TableAssignmentTemplate
 from tests.builders import build_assignment_template_database
 from tests.utils import authenticated_request, gid
 
@@ -111,11 +120,14 @@ def test_remove_quiz_template_mutation(
     course_template_factory,
     quiz_template_factory,
     assignment_template_factory,
+    assignment_template_tag_factory,
 ):
     user = user_factory()
     course_template = course_template_factory(owner=user)
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
+    _ = assignment_template_tag_factory(assignment_template=assignment_template)
+    _ = assignment_template_tag_factory(assignment_template=assignment_template)
     build_assignment_template_database(assignment_template)
 
     query = """
@@ -135,6 +147,20 @@ def test_remove_quiz_template_mutation(
     )
 
     quiz_templates = db_session.query(QuizTemplate)
+    asignment_templates = db_session.query(AssignmentTemplate)
+    tag_templates = db_session.query(AssignmentTemplateTag)
+    database_templates = db_session.query(DatabaseAssignmentTemplate)
+    table_templates = db_session.query(TableAssignmentTemplate)
+    column_templates = db_session.query(TableColumnAssignmentTemplate)
+    relation_templates = db_session.query(TableRelationAssignmentTemplate)
+    data_templates = db_session.query(TableColumnDataTemplate)
     assert not response.get("errors")
     assert response["data"] == expected
     assert quiz_templates.count() == 0
+    assert asignment_templates.count() == 0
+    assert tag_templates.count() == 0
+    assert database_templates.count() == 0
+    assert table_templates.count() == 0
+    assert column_templates.count() == 0
+    assert relation_templates.count() == 0
+    assert data_templates.count() == 0

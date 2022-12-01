@@ -25,7 +25,9 @@ class TableColumnAssignmentTemplate(BaseModel):
         foreign_keys=[table_assignment_template_id],
         back_populates="columns",
     )
-    data: list = relationship("TableColumnDataTemplate", lazy="dynamic", uselist=True)
+    data: list = relationship(
+        "TableColumnDataTemplate", lazy="dynamic", uselist=True, passive_deletes=True
+    )
 
     def __str__(self):
         return f"TableColumn({self.name=} {self.type=} {self.length=})"

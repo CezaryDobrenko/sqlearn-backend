@@ -6,6 +6,8 @@ from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
 from modules.course_template.domain.models.table import TableAssignmentTemplate
+from modules.database_preset.domain.models.column import TableColumn
+from modules.database_preset.domain.models.database import Database
 from modules.database_preset.domain.models.relation import TableRelation
 from modules.database_preset.domain.models.table import Table
 from tests.builders import build_assignment_template_database, build_preset_database
@@ -180,10 +182,16 @@ def test_remove_table_with_relation_and_related_by_mutation(
         context_value={"session": db_session, "request": authenticated_request(user)},
     )
 
+    databases = db_session.query(Database)
+    tables = db_session.query(Table)
+    columns = db_session.query(TableColumn)
+    relations = db_session.query(TableRelation)
     assert not response.get("errors")
     assert response["data"] == expected
-    assert db_session.query(Table).count() == 2
-    assert db_session.query(TableRelation).count() == 0
+    assert databases.count() == 1
+    assert tables.count() == 2
+    assert columns.count() == 5
+    assert relations.count() == 0
 
 
 def test_create_table_assignment_template_mutation(

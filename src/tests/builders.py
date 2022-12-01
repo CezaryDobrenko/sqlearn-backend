@@ -89,9 +89,9 @@ def build_preset_database(user: User) -> Database:
     _ = TableColumnFactory(table=paintings_table, name="name")
     _ = TableColumnFactory(table=paintings_table, name="user_id")
     warehouse_table = TableFactory(database=preset_database, name="warehouse")
-    _ = TableColumnFactory(table=paintings_table, name="id")
-    _ = TableColumnFactory(table=paintings_table, name="name")
-    _ = TableColumnFactory(table=paintings_table, name="painting_id")
+    _ = TableColumnFactory(table=warehouse_table, name="id")
+    _ = TableColumnFactory(table=warehouse_table, name="name")
+    _ = TableColumnFactory(table=warehouse_table, name="painting_id")
     _ = TableRelationFactory(
         name="related_by_fk",
         table=users_table,

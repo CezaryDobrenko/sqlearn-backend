@@ -26,7 +26,7 @@ class AssignmentTemplate(BaseModel):
 
     database = relationship("DatabaseAssignmentTemplate", uselist=False)
     template_tags: list = relationship(
-        "AssignmentTemplateTag", lazy="dynamic", uselist=True
+        "AssignmentTemplateTag", lazy="dynamic", uselist=True, passive_deletes=True
     )
 
     def __str__(self):
