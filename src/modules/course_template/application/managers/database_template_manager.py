@@ -37,6 +37,7 @@ class DatabaseTemplateManager:
             assignment_database = DatabaseAssignmentTemplate(
                 name="Database", assignment_template=assignment_template
             )
+            self.session.add(assignment_database)
         return assignment_database
 
     def _copy_database_schema(

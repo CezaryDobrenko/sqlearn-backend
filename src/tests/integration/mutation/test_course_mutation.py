@@ -1,8 +1,8 @@
 import datetime
 
 from modules.course_template.domain.models.course import CourseTemplate
-from tests.utils import authenticated_request, gid
 from tests.builders import build_assignment_template_database
+from tests.utils import authenticated_request, gid
 
 
 def test_create_course_template_mutation(db_session, graphql_client, user_factory):

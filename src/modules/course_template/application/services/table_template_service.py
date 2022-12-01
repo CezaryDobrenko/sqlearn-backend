@@ -13,13 +13,14 @@ class TableAssignmentTemplateManagementService:
         self, database_assignment_template_id: int, name: str, **kwargs
     ) -> DatabaseAssignmentTemplate:
         with transaction_scope(self.session) as session:
-            assignment_table, _ = get_or_create(
+            assignment_table, is_created = get_or_create(
                 session,
                 TableAssignmentTemplate,
                 database_assignment_template_id=database_assignment_template_id,
                 name=name,
-                description=kwargs.get("description"),
             )
+            if is_created:
+                assignment_table.update(**kwargs)
         return assignment_table
 
     @authorize_access(TableAssignmentTemplate)

@@ -1,6 +1,6 @@
 from modules.course_template.domain.models.quiz import QuizTemplate
-from tests.utils import authenticated_request, gid
 from tests.builders import build_assignment_template_database
+from tests.utils import authenticated_request, gid
 
 
 def test_create_quiz_template_mutation(
