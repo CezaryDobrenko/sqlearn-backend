@@ -47,3 +47,9 @@ class TableAssignmentTemplate(BaseModel):
         return f"TableAssignmentTemplate({self.name=})"
 
     __repr__ = __str__
+
+    def has_column(self, column_name: str) -> bool:
+        for column in self.columns:
+            if column.name == column_name:
+                return True
+        return False

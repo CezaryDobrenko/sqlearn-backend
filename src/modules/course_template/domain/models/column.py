@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 from models.base_model import BaseModel
 from modules.database_preset.domain.models.column import COLUMN_TYPE
 
+RELEVANT_FIELDS = ["name", "type"]
+
 
 class TableColumnAssignmentTemplate(BaseModel):
     __tablename__ = "table_column_assignment_template"
@@ -33,3 +35,14 @@ class TableColumnAssignmentTemplate(BaseModel):
         return f"TableColumn({self.name=} {self.type=} {self.length=})"
 
     __repr__ = __str__
+
+    @property
+    def assigned_table_id(self):
+        return self.table_assignment_template_id
+
+    def is_relevant_field_updated(self, **kwargs) -> bool:
+        for field in RELEVANT_FIELDS:
+            if field in kwargs:
+                if getattr(self, field) != kwargs[field]:
+                    return True
+        return False

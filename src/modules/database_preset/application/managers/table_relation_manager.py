@@ -29,19 +29,19 @@ class TableRelationManager:
         user = kwargs["current_user"]
         with transaction_scope(self.session):
             if "table_id" in kwargs:
-                table_id = kwargs["relation_table_id"]
+                table_id = kwargs["table_id"]
                 source_column = (
-                    relation.table_column_name
+                    kwargs["table_column_name"]
                     if "table_column_name" in kwargs
-                    else kwargs["table_column_name"]
+                    else relation.table_column_name
                 )
                 is_source_valid = self._is_valid(table_id, source_column, user)
             if "relation_table_id" in kwargs:
                 relation_id = kwargs["relation_table_id"]
                 relation_column = (
-                    relation.relation_column_name
+                    kwargs["relation_column_name"]
                     if "relation_column_name" in kwargs
-                    else kwargs["relation_column_name"]
+                    else relation.relation_column_name
                 )
                 is_relation_valid = self._is_valid(relation_id, relation_column, user)
         return True if is_source_valid and is_relation_valid else False

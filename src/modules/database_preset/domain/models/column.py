@@ -38,3 +38,7 @@ class TableColumn(BaseModel):
         return f"TableColumn({self.name=} {self.type=} {self.length=})"
 
     __repr__ = __str__
+
+    @property
+    def assigned_table_id(self):
+        return self.table_id

@@ -400,8 +400,6 @@ def test_remove_table_column_assignment_template_without_relation_mutation(
     variables = {"columnAssignmentTemplateId": gid(column)}
     expected = {"removeTableColumnAssignmentTemplate": {"isRemoved": True}}
 
-    data = db_session.query(TableColumnDataTemplate)
-
     response = graphql_client.execute(
         query,
         variables=variables,

@@ -1,9 +1,13 @@
 from models import User
 from modules.course_template.domain.models.assignment import AssignmentTemplate
+from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.database_preset.domain.models.database import Database
 from tests.factories import (
+    AssignmentTemplateFactory,
+    CourseTemplateFactory,
     DatabaseAssignmentTemplateFactory,
     DatabaseFactory,
+    QuizTemplateFactory,
     TableAssignmentTemplateFactory,
     TableColumnAssignmentTemplateFactory,
     TableColumnDataTemplateFactory,
@@ -12,6 +16,13 @@ from tests.factories import (
     TableRelationAssignmentTemplateFactory,
     TableRelationFactory,
 )
+
+
+def build_assignment_template(user: User):
+    course_template = CourseTemplateFactory(owner=user)
+    quiz_template = QuizTemplateFactory(course_template=course_template)
+    assignment_template = AssignmentTemplateFactory(quiz_template=quiz_template)
+    return assignment_template
 
 
 def build_assignment_template_database(assignment_template: AssignmentTemplate):
@@ -77,6 +88,21 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         relation_column_name="user_id",
     )
     return database
+
+
+def build_assignment_template_table(
+    database: DatabaseAssignmentTemplateFactory,
+) -> TableAssignmentTemplate:
+    warehourse_table = TableAssignmentTemplateFactory(
+        database_assignment_template=database, name="warehouse"
+    )
+    _ = TableColumnAssignmentTemplateFactory(
+        table_assignment_template=warehourse_table, name="id"
+    )
+    _ = TableColumnAssignmentTemplateFactory(
+        table_assignment_template=warehourse_table, name="name"
+    )
+    return warehourse_table
 
 
 def build_preset_database(user: User) -> Database:

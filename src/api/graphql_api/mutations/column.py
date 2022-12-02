@@ -105,11 +105,8 @@ class UpdateTableColumnAssignmentTemplate(Mutation):
     def mutate(self, info, column_assignment_template_id: str, **kwargs):
         session = info.context["session"]
         column_assignment_template_pk = retrieve_id(column_assignment_template_id)
-        is_relationship = True if "name" in kwargs or "type" in kwargs else False
         manager = ColumnAssignmentTemplateManagementService(session)
-        column = manager.update(
-            column_assignment_template_pk, is_relationship, **kwargs
-        )
+        column = manager.update(column_assignment_template_pk, **kwargs)
         return UpdateTableColumnAssignmentTemplate(column=column)
 
 
