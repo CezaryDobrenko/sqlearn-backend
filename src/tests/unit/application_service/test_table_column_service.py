@@ -1,6 +1,6 @@
 import pytest
 
-from exceptions import RelationException
+from exceptions import ColumnException
 from modules.course_template.application.services.column_template_service import (
     ColumnAssignmentTemplateManagementService,
 )
@@ -34,7 +34,7 @@ def test_update_table_column_when_relation_exists(
 
     service = TableColumnManagementService(db_session)
 
-    with pytest.raises(RelationException):
+    with pytest.raises(ColumnException):
         update = {"current_user": user, "name": "other_id"}
         service.update(column.id, is_relationship=True, **update)
 
@@ -63,7 +63,7 @@ def test_remove_table_column_when_relation_exists(
 
     service = TableColumnManagementService(db_session)
 
-    with pytest.raises(RelationException):
+    with pytest.raises(ColumnException):
         service.remove(column.id, **{"current_user": user})
 
 
@@ -84,7 +84,7 @@ def test_update_table_column_assignment_template_when_relation_exists(
 
     service = ColumnAssignmentTemplateManagementService(db_session)
 
-    with pytest.raises(RelationException):
+    with pytest.raises(ColumnException):
         update = {"current_user": user, "name": "other_id"}
         service.update(column.id, is_relationship=True, **update)
 
@@ -106,5 +106,5 @@ def test_remove_table_column_assignment_template_when_relation_exists(
 
     service = ColumnAssignmentTemplateManagementService(db_session)
 
-    with pytest.raises(RelationException):
+    with pytest.raises(ColumnException):
         service.remove(column.id, **{"current_user": user})

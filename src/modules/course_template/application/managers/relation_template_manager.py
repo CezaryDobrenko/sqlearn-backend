@@ -54,6 +54,15 @@ class TableRelationAssignmentTemplateManager:
         source_column = get_relation_value(relation, "table_column_name", **kwargs)
         relation_table_id = get_relation_value(relation, "relation_table_id", **kwargs)
         relation_column = get_relation_value(relation, "relation_column_name", **kwargs)
+
+        if (
+            relation.relation_column_name == relation_column
+            and relation.relation_table_id == relation_table_id
+            and relation.table_column_name == source_column
+            and relation.table_id == source_table_id
+        ):
+            return True
+
         return self.can_create(
             source_table_id,
             source_column,

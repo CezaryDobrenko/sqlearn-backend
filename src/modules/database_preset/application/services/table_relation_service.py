@@ -1,3 +1,4 @@
+from exceptions import RelationException
 from instance_access import authorize_access
 from models.utils import get_or_create, transaction_scope
 from modules.database_preset.application.managers.table_relation_manager import (
@@ -27,7 +28,7 @@ class TableRelationManagementService:
             if not self.relation_manager.can_create(
                 table_id, column_name, relation_table_id, relation_column_name, **kwargs
             ):
-                raise Exception("Invalid Relation data")
+                raise RelationException(action="create")
 
             table_relation, _ = get_or_create(
                 session,
@@ -47,7 +48,7 @@ class TableRelationManagementService:
             table_relation = session.query(TableRelation).get(table_relation_id)
 
             if not self.relation_manager.can_update(table_relation, **kwargs):
-                raise Exception("Invalid Relation data")
+                raise RelationException(action="update")
 
             table_relation.update(**kwargs)
         return table_relation

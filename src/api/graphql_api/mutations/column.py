@@ -26,11 +26,11 @@ class CreateTableColumn(Mutation):
         is_unique = Boolean()
 
     @authentication_required()
-    def mutate(self, info, table_id: str, name: str, **kwargs):
+    def mutate(self, info, table_id: str, name: str, type: str, **kwargs):
         session = info.context["session"]
         table_pk = retrieve_id(table_id)
         manager = TableColumnManagementService(session)
-        column = manager.create(table_pk, name, **kwargs)
+        column = manager.create(table_pk, name, type, **kwargs)
         return CreateTableColumn(column=column)
 
 
@@ -49,9 +49,8 @@ class UpdateTableColumn(Mutation):
     def mutate(self, info, table_column_id: str, **kwargs):
         session = info.context["session"]
         table_column_pk = retrieve_id(table_column_id)
-        is_relationship = True if "name" in kwargs or "type" in kwargs else False
         manager = TableColumnManagementService(session)
-        column = manager.update(table_column_pk, is_relationship, **kwargs)
+        column = manager.update(table_column_pk, **kwargs)
         return UpdateTableColumn(column=column)
 
 
@@ -82,11 +81,13 @@ class CreateTableColumnAssignmentTemplate(Mutation):
         is_unique = Boolean()
 
     @authentication_required()
-    def mutate(self, info, table_assignment_template_id: str, name: str, **kwargs):
+    def mutate(
+        self, info, table_assignment_template_id: str, name: str, type: str, **kwargs
+    ):
         session = info.context["session"]
         table_assignment_template_pk = retrieve_id(table_assignment_template_id)
         manager = ColumnAssignmentTemplateManagementService(session)
-        column = manager.create(table_assignment_template_pk, name, **kwargs)
+        column = manager.create(table_assignment_template_pk, name, type, **kwargs)
         return CreateTableColumnAssignmentTemplate(column=column)
 
 

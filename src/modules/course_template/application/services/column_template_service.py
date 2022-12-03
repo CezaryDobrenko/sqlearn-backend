@@ -1,6 +1,6 @@
-from exceptions import AlreadyExists, RelationException
+from exceptions import AlreadyExists, ColumnException
 from instance_access import authorize_access
-from models.utils import get_or_create, transaction_scope
+from models.utils import transaction_scope
 from modules.course_template.application.managers.column_template_manager import (
     TableColumnAssignmentTemplateManager,
 )
@@ -15,7 +15,7 @@ class ColumnAssignmentTemplateManagementService:
 
     @authorize_access(TableAssignmentTemplate)
     def create(
-        self, table_assignment_template_id: int, name: str, **kwargs
+        self, table_assignment_template_id: int, name: str, type: str, **kwargs
     ) -> TableColumnAssignmentTemplate:
         with transaction_scope(self.session) as session:
             table = session.query(TableAssignmentTemplate).get(
@@ -24,14 +24,13 @@ class ColumnAssignmentTemplateManagementService:
             if not self.column_manager.can_create(table, name):
                 raise AlreadyExists("Column with that name is already defined!")
 
-            table_column, is_created = get_or_create(
-                session,
-                TableColumnAssignmentTemplate,
+            table_column = TableColumnAssignmentTemplate(
                 table_assignment_template_id=table_assignment_template_id,
                 name=name,
+                type=type,
             )
-            if is_created:
-                table_column.update(**kwargs)
+            table_column.update(**kwargs)
+            session.add(table_column)
 
             # TODO: add default data for existing rows
 
@@ -47,7 +46,7 @@ class ColumnAssignmentTemplateManagementService:
             )
 
             if not self.column_manager.can_update(table_column, **kwargs):
-                raise RelationException(action="update")
+                raise ColumnException(action="update")
 
             table_column.update(**kwargs)
         return table_column
@@ -60,7 +59,7 @@ class ColumnAssignmentTemplateManagementService:
             )
 
             if not self.column_manager.can_delete(table_column):
-                raise RelationException(action="delete")
+                raise ColumnException(action="delete")
 
             session.delete(table_column)
         return True

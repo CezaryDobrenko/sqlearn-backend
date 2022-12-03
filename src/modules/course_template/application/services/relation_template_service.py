@@ -1,3 +1,4 @@
+from exceptions import RelationException
 from instance_access import authorize_access
 from models.utils import get_or_create, transaction_scope
 from modules.course_template.application.managers.relation_template_manager import (
@@ -33,7 +34,7 @@ class TableRelationAssignmentTemplateManagementService:
                 relation_column_name,
                 **kwargs
             ):
-                raise Exception("Relation cannot be created!")
+                raise RelationException(action="create")
 
             table_relation, _ = get_or_create(
                 session,
@@ -56,8 +57,10 @@ class TableRelationAssignmentTemplateManagementService:
                 table_relation_assignment_template_id
             )
 
-            if self.relation_manager.can_update(table_relation, **kwargs):
-                table_relation.update(**kwargs)
+            if not self.relation_manager.can_update(table_relation, **kwargs):
+                raise RelationException(action="update")
+
+            table_relation.update(**kwargs)
         return table_relation
 
     @authorize_access(TableRelationAssignmentTemplate)

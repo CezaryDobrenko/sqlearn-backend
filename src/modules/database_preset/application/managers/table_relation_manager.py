@@ -1,8 +1,10 @@
-from instance_access import has_user_access
-from models.utils import transaction_scope
 from modules.database_preset.domain.models.relation import TableRelation
 from modules.database_preset.domain.models.table import Table
-from modules.user.domain.models.user import User
+from modules.helper.relation_helper import (
+    get_relation_value,
+    is_relation_already_defined,
+    is_relation_valid,
+)
 
 
 class TableRelationManager:
@@ -17,37 +19,52 @@ class TableRelationManager:
         relation_column_name: str,
         **kwargs
     ) -> bool:
-        user = kwargs["current_user"]
-        with transaction_scope(self.session):
-            is_source_valid = self._is_valid(source_table_id, source_column_name, user)
-            is_relation_valid = self._is_valid(
-                relation_table_id, relation_column_name, user
+        is_relation_defined = is_relation_already_defined(
+            self.session,
+            TableRelation,
+            source_table_id,
+            source_column_name,
+            relation_table_id,
+            relation_column_name,
+        )
+        if not is_relation_defined:
+            user = kwargs["current_user"]
+            is_source_table_valid = is_relation_valid(
+                self.session,
+                Table,
+                source_table_id,
+                source_column_name,
+                user,
             )
-        return True if is_source_valid and is_relation_valid else False
+            is_relation_table_valid = is_relation_valid(
+                self.session,
+                Table,
+                relation_table_id,
+                relation_column_name,
+                user,
+            )
+            if is_source_table_valid and is_relation_table_valid:
+                return True
+        return False
 
     def can_update(self, relation: TableRelation, **kwargs) -> bool:
-        user = kwargs["current_user"]
-        with transaction_scope(self.session):
-            if "table_id" in kwargs:
-                table_id = kwargs["table_id"]
-                source_column = (
-                    kwargs["table_column_name"]
-                    if "table_column_name" in kwargs
-                    else relation.table_column_name
-                )
-                is_source_valid = self._is_valid(table_id, source_column, user)
-            if "relation_table_id" in kwargs:
-                relation_id = kwargs["relation_table_id"]
-                relation_column = (
-                    kwargs["relation_column_name"]
-                    if "relation_column_name" in kwargs
-                    else relation.relation_column_name
-                )
-                is_relation_valid = self._is_valid(relation_id, relation_column, user)
-        return True if is_source_valid and is_relation_valid else False
+        source_table_id = get_relation_value(relation, "table_id", **kwargs)
+        source_column = get_relation_value(relation, "table_column_name", **kwargs)
+        relation_table_id = get_relation_value(relation, "relation_table_id", **kwargs)
+        relation_column = get_relation_value(relation, "relation_column_name", **kwargs)
 
-    def _is_valid(self, table_id: int, column_name: str, user: User) -> bool:
-        table = self.session.query(Table).get(table_id)
-        if has_user_access(table, user):
-            return True if table.has_column(column_name) else False
-        raise Exception("Permision Denied")
+        if (
+            relation.relation_column_name == relation_column
+            and relation.relation_table_id == relation_table_id
+            and relation.table_column_name == source_column
+            and relation.table_id == source_table_id
+        ):
+            return True
+
+        return self.can_create(
+            source_table_id,
+            source_column,
+            relation_table_id,
+            relation_column,
+            **{"current_user": kwargs["current_user"]}
+        )

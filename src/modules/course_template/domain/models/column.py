@@ -2,9 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
-from modules.database_preset.domain.models.column import COLUMN_TYPE
-
-RELEVANT_FIELDS = ["name", "type"]
+from modules.database_preset.domain.models.column import COLUMN_TYPE, RELEVANT_FIELDS
 
 
 class TableColumnAssignmentTemplate(BaseModel):

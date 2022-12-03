@@ -15,6 +15,7 @@ class ColumnType(enum.Enum):
 
 
 COLUMN_TYPE = Enum(ColumnType)
+RELEVANT_FIELDS = ["name", "type"]
 
 
 class TableColumn(BaseModel):
@@ -42,3 +43,10 @@ class TableColumn(BaseModel):
     @property
     def assigned_table_id(self):
         return self.table_id
+
+    def is_relevant_field_updated(self, **kwargs) -> bool:
+        for field in RELEVANT_FIELDS:
+            if field in kwargs:
+                if getattr(self, field) != kwargs[field]:
+                    return True
+        return False
