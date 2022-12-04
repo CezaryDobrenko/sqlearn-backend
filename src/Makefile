@@ -5,6 +5,9 @@ path := PYTHONPATH=.
 test:
 	$(path) APP_SETTINGS=$(test_config) pytest . -x
 
+single-test:
+	$(path) APP_SETTINGS=$(test_config) pytest $(test_path) -x
+
 test-cov:
 	$(path) APP_SETTINGS=$(test_config) pytest -x --cov=./ --cov-report=html
 
