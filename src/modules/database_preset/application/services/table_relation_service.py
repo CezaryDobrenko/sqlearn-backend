@@ -28,7 +28,7 @@ class TableRelationManagementService:
             if not self.relation_manager.can_create(
                 table_id, column_name, relation_table_id, relation_column_name, **kwargs
             ):
-                raise RelationException(action="create")
+                raise RelationException("create error")
 
             table_relation, _ = get_or_create(
                 session,
@@ -48,7 +48,7 @@ class TableRelationManagementService:
             table_relation = session.query(TableRelation).get(table_relation_id)
 
             if not self.relation_manager.can_update(table_relation, **kwargs):
-                raise RelationException(action="update")
+                raise RelationException("update error")
 
             table_relation.update(**kwargs)
         return table_relation

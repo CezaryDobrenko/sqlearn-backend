@@ -31,7 +31,7 @@ class TableColumnManagementService:
             table_column = session.query(TableColumn).get(table_column_id)
 
             if not self.column_manager.can_update(table_column, **kwargs):
-                raise ColumnException(action="update")
+                raise ColumnException("update error")
 
             table_column.update(**kwargs)
         return table_column
@@ -42,7 +42,7 @@ class TableColumnManagementService:
             table_column = session.query(TableColumn).get(table_column_id)
 
             if not self.column_manager.can_delete(table_column):
-                raise ColumnException(action="delete")
+                raise ColumnException("delete error")
 
             session.delete(table_column)
         return True

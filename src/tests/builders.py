@@ -33,7 +33,7 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         database_assignment_template=database, name="users"
     )
     user_col_1 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=users_table, name="id"
+        table_assignment_template=users_table, name="id", is_autoincrement=True
     )
     user_col_2 = TableColumnAssignmentTemplateFactory(
         table_assignment_template=users_table, name="name"
@@ -54,7 +54,7 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         database_assignment_template=database, name="paintings"
     )
     paint_col_1 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=paintings_table, name="id"
+        table_assignment_template=paintings_table, name="id", is_autoincrement=True
     )
     paint_col_2 = TableColumnAssignmentTemplateFactory(
         table_assignment_template=paintings_table, name="name"

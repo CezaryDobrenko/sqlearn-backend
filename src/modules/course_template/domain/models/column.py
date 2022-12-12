@@ -11,6 +11,9 @@ class TableColumnAssignmentTemplate(BaseModel):
     name: str = Column(String(500))
     type: str = Column(COLUMN_TYPE, nullable=False)
     length: int = Column(Integer)
+    autoincrement_index: int = Column(Integer, default=1)
+
+    is_autoincrement: bool = Column(Boolean)
     is_null: bool = Column(Boolean)
     is_unique: bool = Column(Boolean)
 

@@ -1,7 +1,10 @@
+from typing import Optional
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
+from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 
 
 class TableAssignmentTemplate(BaseModel):
@@ -48,8 +51,21 @@ class TableAssignmentTemplate(BaseModel):
 
     __repr__ = __str__
 
+    def get_column(self, column_name: str) -> Optional[TableColumnAssignmentTemplate]:
+        if self.has_column(column_name):
+            return self.columns.filter(
+                TableColumnAssignmentTemplate.name == column_name
+            ).first()
+        return None
+
     def has_column(self, column_name: str) -> bool:
         for column in self.columns:
             if column.name == column_name:
                 return True
         return False
+
+    def has_autoincrement_defined(self):
+        for column in self.columns:
+            if column.is_autoincrement:
+                return column
+        return None

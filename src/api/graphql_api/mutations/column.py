@@ -79,6 +79,7 @@ class CreateTableColumnAssignmentTemplate(Mutation):
         length = Int()
         is_null = Boolean()
         is_unique = Boolean()
+        is_autoincrement = Boolean()
 
     @authentication_required()
     def mutate(
@@ -101,6 +102,7 @@ class UpdateTableColumnAssignmentTemplate(Mutation):
         length = Int()
         is_null = Boolean()
         is_unique = Boolean()
+        is_autoincrement = Boolean()
 
     @authentication_required()
     def mutate(self, info, column_assignment_template_id: str, **kwargs):

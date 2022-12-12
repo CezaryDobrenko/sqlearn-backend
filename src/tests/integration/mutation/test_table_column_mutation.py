@@ -224,6 +224,7 @@ def test_create_table_column_assignment_template_mutation(
     length = 300
     is_null = False
     is_unique = True
+    is_autoincrement = False
 
     query = """
         mutation createTableColumnAssignmentTemplate(
@@ -232,7 +233,8 @@ def test_create_table_column_assignment_template_mutation(
             $type: String!,
             $length: Int,
             $isNull: Boolean,
-            $isUnique: Boolean
+            $isUnique: Boolean,
+            $isAutoincrement: Boolean,
         ){
             createTableColumnAssignmentTemplate(
                 tableAssignmentTemplateId: $tableAssignmentTemplateId,
@@ -240,7 +242,8 @@ def test_create_table_column_assignment_template_mutation(
                 type: $type,
                 length: $length,
                 isNull: $isNull,
-                isUnique: $isUnique
+                isUnique: $isUnique,
+                isAutoincrement: $isAutoincrement,
             ){
                 column{
                     name
@@ -262,6 +265,7 @@ def test_create_table_column_assignment_template_mutation(
         "length": length,
         "isNull": is_null,
         "isUnique": is_unique,
+        "isAutoincrement": is_autoincrement,
     }
     expected = {
         "createTableColumnAssignmentTemplate": {
@@ -308,6 +312,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
     new_length = 15
     new_is_null = False
     new_is_unique = False
+    new_is_autoincrement = False
 
     query = """
         mutation updateTableColumnAssignmentTemplate(
@@ -316,7 +321,8 @@ def test_update_table_column_assignment_template_without_relation_mutation(
             $type: String,
             $length: Int,
             $isNull: Boolean,
-            $isUnique: Boolean
+            $isUnique: Boolean,
+            $isAutoincrement: Boolean,
         ){
             updateTableColumnAssignmentTemplate(
                 columnAssignmentTemplateId: $columnAssignmentTemplateId,
@@ -324,7 +330,8 @@ def test_update_table_column_assignment_template_without_relation_mutation(
                 type: $type,
                 length: $length,
                 isNull: $isNull,
-                isUnique: $isUnique
+                isUnique: $isUnique,
+                isAutoincrement: $isAutoincrement
             ){
                 column{
                     name
@@ -346,6 +353,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
         "length": new_length,
         "isNull": new_is_null,
         "isUnique": new_is_unique,
+        "isAutoincrement": new_is_autoincrement,
     }
     expected = {
         "updateTableColumnAssignmentTemplate": {

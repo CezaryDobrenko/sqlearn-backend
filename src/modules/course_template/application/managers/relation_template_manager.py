@@ -1,3 +1,4 @@
+from exceptions import RelationException
 from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
@@ -45,9 +46,12 @@ class TableRelationAssignmentTemplateManager:
                 relation_column_name,
                 user,
             )
-            if is_source_table_valid and is_relation_table_valid:
-                return True
-        return False
+            if not is_source_table_valid:
+                raise RelationException("Source column invalid!")
+            if not is_relation_table_valid:
+                raise RelationException("Destination column invalid!")
+            return True
+        raise RelationException("Relation already defined!")
 
     def can_update(self, relation: TableRelationAssignmentTemplate, **kwargs) -> bool:
         source_table_id = get_relation_value(relation, "table_id", **kwargs)
