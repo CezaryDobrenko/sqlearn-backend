@@ -20,19 +20,24 @@ class TableRowNode(ObjectType):
 
     @classmethod
     def from_template(cls, table_template: TableAssignmentTemplate):
-        column_count = table_template.columns.count()
-        data_set = (
-            table_template.columns.join(TableColumnDataTemplate)
-            .with_entities(TableColumnDataTemplate)
-            .all()
-        )
-        return [
-            cls(
-                id=f"{table_template.id}.{i}.table_assignment_template",
-                cells=data_set[i : i + column_count],
+        return []
+        """
+            column_count = table_template.columns.count()
+            data_set = (
+                table_template.columns.join(TableColumnDataTemplate)
+                .with_entities(TableColumnDataTemplate)
+                .all()
             )
-            for i in range(0, len(data_set), column_count)
-        ]
+
+            Enable rows when data is handled properly
+            return [
+                cls(
+                    id=f"{table_template.id}.{i}.table_assignment_template",
+                    cells=data_set[i : i + column_count],
+                )
+                for i in range(0, len(data_set), column_count)
+            ]
+        """
 
 
 class TableRowConnection(relay.Connection):
