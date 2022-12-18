@@ -2,7 +2,11 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
-from modules.database_preset.domain.models.column import COLUMN_TYPE, RELEVANT_FIELDS
+from modules.database_preset.domain.models.column import (
+    COLUMN_TYPE,
+    COLUMN_TYPE_DEFAULT,
+    RELEVANT_FIELDS,
+)
 
 
 class TableColumnAssignmentTemplate(BaseModel):
@@ -12,6 +16,7 @@ class TableColumnAssignmentTemplate(BaseModel):
     type: str = Column(COLUMN_TYPE, nullable=False)
     length: int = Column(Integer)
     autoincrement_index: int = Column(Integer, default=1)
+    default_value: str = Column(String)
 
     is_autoincrement: bool = Column(Boolean)
     is_null: bool = Column(Boolean)
@@ -40,6 +45,12 @@ class TableColumnAssignmentTemplate(BaseModel):
     @property
     def assigned_table_id(self):
         return self.table_assignment_template_id
+
+    @property
+    def get_default_value(self) -> str:
+        if self.default_value:
+            return self.default_value
+        return COLUMN_TYPE_DEFAULT[self.type.value]
 
     def is_relevant_field_updated(self, **kwargs) -> bool:
         for field in RELEVANT_FIELDS:

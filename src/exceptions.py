@@ -8,3 +8,7 @@ class ColumnException(Exception):
 
 class AlreadyExists(Exception):
     pass
+
+
+class InvalidValue(Exception):
+    pass

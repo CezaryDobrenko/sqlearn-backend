@@ -1,5 +1,6 @@
 from typing import Optional
 
+from exceptions import InvalidValue
 from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.database_preset.domain.models.column import TableColumn
@@ -29,5 +30,22 @@ def can_create_autoincrement_column(
     if is_autoincrement:
         autoincrement_column = table.has_autoincrement_defined()
         if autoincrement_column and autoincrement_column != column:
+            return False
+    return True
+
+
+def is_default_value_valid_type(column_type: str, default_value: str) -> bool:
+    if column_type and default_value:
+        try:
+            if column_type in ["INTEGER", "NUMERIC"]:
+                int(default_value)
+            elif column_type in ["TEXT", "BLOB"]:
+                str(default_value)
+            elif column_type == "REAL":
+                float(default_value)
+            else:
+                raise InvalidValue("Unexpected column type")
+            return True
+        except Exception:
             return False
     return True

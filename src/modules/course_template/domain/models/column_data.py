@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
@@ -25,3 +27,10 @@ class TableColumnDataTemplate(BaseModel):
         return f"TableColumnDataTemplate({self.value=})"
 
     __repr__ = __str__
+
+    def set_value(self, value: Optional[str] = None) -> None:
+        table = self.table_column_assignment_template
+        self.value = value if value else table.get_default_value
+
+    def reset_value(self) -> None:
+        self.value = self.table_column_assignment_template.get_default_value

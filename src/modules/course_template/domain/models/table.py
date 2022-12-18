@@ -51,6 +51,15 @@ class TableAssignmentTemplate(BaseModel):
 
     __repr__ = __str__
 
+    @property
+    def rows_count(self) -> int:
+        data = sum([column.data.count() for column in self.columns])
+
+        if data % self.columns.count() != 0:
+            raise Exception("Invalid data in table")
+
+        return int(data / self.columns.count())
+
     def get_column(self, column_name: str) -> Optional[TableColumnAssignmentTemplate]:
         if self.has_column(column_name):
             return self.columns.filter(

@@ -5,6 +5,14 @@ from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
 
+COLUMN_TYPE_DEFAULT = {
+    "INTEGER": 0,
+    "NUMERIC": 0,
+    "REAL": 0,
+    "TEXT": "",
+    "BLOB": "",
+}
+
 
 class ColumnType(enum.Enum):
     INTEGER = "INTEGER"

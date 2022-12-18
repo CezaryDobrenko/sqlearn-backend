@@ -225,6 +225,7 @@ def test_create_table_column_assignment_template_mutation(
     is_null = False
     is_unique = True
     is_autoincrement = False
+    default_value = "brak danych"
 
     query = """
         mutation createTableColumnAssignmentTemplate(
@@ -235,6 +236,7 @@ def test_create_table_column_assignment_template_mutation(
             $isNull: Boolean,
             $isUnique: Boolean,
             $isAutoincrement: Boolean,
+            $defaultValue: String
         ){
             createTableColumnAssignmentTemplate(
                 tableAssignmentTemplateId: $tableAssignmentTemplateId,
@@ -244,6 +246,7 @@ def test_create_table_column_assignment_template_mutation(
                 isNull: $isNull,
                 isUnique: $isUnique,
                 isAutoincrement: $isAutoincrement,
+                defaultValue: $defaultValue
             ){
                 column{
                     name
@@ -251,6 +254,7 @@ def test_create_table_column_assignment_template_mutation(
                     length
                     isNull
                     isUnique
+                    defaultValue
                     tableAssignmentTemplate{
                         id
                     }
@@ -266,6 +270,7 @@ def test_create_table_column_assignment_template_mutation(
         "isNull": is_null,
         "isUnique": is_unique,
         "isAutoincrement": is_autoincrement,
+        "defaultValue": default_value,
     }
     expected = {
         "createTableColumnAssignmentTemplate": {
@@ -275,6 +280,7 @@ def test_create_table_column_assignment_template_mutation(
                 "length": length,
                 "isNull": is_null,
                 "isUnique": is_unique,
+                "defaultValue": default_value,
                 "tableAssignmentTemplate": {"id": gid(table)},
             }
         }
@@ -287,9 +293,13 @@ def test_create_table_column_assignment_template_mutation(
     )
 
     columns = db_session.query(TableColumnAssignmentTemplate)
+    data = db_session.query(TableColumnDataTemplate)
+    created_data = data.filter(TableColumnDataTemplate.value == default_value)
     assert not response.get("errors")
     assert response["data"] == expected
     assert columns.count() == 6
+    assert data.count() == 12
+    assert created_data.count() == 2
 
 
 def test_update_table_column_assignment_template_without_relation_mutation(
@@ -313,6 +323,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
     new_is_null = False
     new_is_unique = False
     new_is_autoincrement = False
+    new_default_value = "10"
 
     query = """
         mutation updateTableColumnAssignmentTemplate(
@@ -323,6 +334,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
             $isNull: Boolean,
             $isUnique: Boolean,
             $isAutoincrement: Boolean,
+            $defaultValue: String
         ){
             updateTableColumnAssignmentTemplate(
                 columnAssignmentTemplateId: $columnAssignmentTemplateId,
@@ -331,7 +343,8 @@ def test_update_table_column_assignment_template_without_relation_mutation(
                 length: $length,
                 isNull: $isNull,
                 isUnique: $isUnique,
-                isAutoincrement: $isAutoincrement
+                isAutoincrement: $isAutoincrement,
+                defaultValue: $defaultValue
             ){
                 column{
                     name
@@ -339,6 +352,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
                     length
                     isNull
                     isUnique
+                    defaultValue
                     tableAssignmentTemplate{
                         id
                     }
@@ -354,6 +368,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
         "isNull": new_is_null,
         "isUnique": new_is_unique,
         "isAutoincrement": new_is_autoincrement,
+        "defaultValue": new_default_value,
     }
     expected = {
         "updateTableColumnAssignmentTemplate": {
@@ -363,6 +378,7 @@ def test_update_table_column_assignment_template_without_relation_mutation(
                 "length": new_length,
                 "isNull": new_is_null,
                 "isUnique": new_is_unique,
+                "defaultValue": new_default_value,
                 "tableAssignmentTemplate": {"id": gid(table)},
             }
         }
@@ -374,12 +390,17 @@ def test_update_table_column_assignment_template_without_relation_mutation(
         context_value={"session": db_session, "request": authenticated_request(user)},
     )
 
+    updated = db_session.query(TableColumnDataTemplate).filter(
+        TableColumnDataTemplate.value == new_default_value
+    )
     assert not response.get("errors")
     assert response["data"] == expected
     assert column.name == new_name
     assert column.type == ColumnType.INTEGER
     assert column.length == new_length
     assert column.is_null == new_is_null
+    assert column.default_value == new_default_value
+    assert updated.count() == 2
 
 
 def test_remove_table_column_assignment_template_without_relation_mutation(
