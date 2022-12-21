@@ -318,12 +318,12 @@ def test_update_table_column_assignment_template_without_relation_mutation(
     _, table = database_template.tables.all()
     _, column, _ = table.columns.all()
     new_name = "new_name"
-    new_type = "INTEGER"
+    new_type = "BLOB"
     new_length = 15
     new_is_null = False
     new_is_unique = False
     new_is_autoincrement = False
-    new_default_value = "10"
+    new_default_value = "blob_value"
 
     query = """
         mutation updateTableColumnAssignmentTemplate(
@@ -390,17 +390,13 @@ def test_update_table_column_assignment_template_without_relation_mutation(
         context_value={"session": db_session, "request": authenticated_request(user)},
     )
 
-    updated = db_session.query(TableColumnDataTemplate).filter(
-        TableColumnDataTemplate.value == new_default_value
-    )
     assert not response.get("errors")
     assert response["data"] == expected
     assert column.name == new_name
-    assert column.type == ColumnType.INTEGER
+    assert column.type == ColumnType.BLOB
     assert column.length == new_length
     assert column.is_null == new_is_null
     assert column.default_value == new_default_value
-    assert updated.count() == 2
 
 
 def test_remove_table_column_assignment_template_without_relation_mutation(

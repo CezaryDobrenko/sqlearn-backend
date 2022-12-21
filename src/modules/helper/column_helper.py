@@ -34,15 +34,15 @@ def can_create_autoincrement_column(
     return True
 
 
-def is_default_value_valid_type(column_type: str, default_value: str) -> bool:
-    if column_type and default_value:
+def can_convert_value(column_type: str, value: str) -> bool:
+    if column_type and value:
         try:
             if column_type in ["INTEGER", "NUMERIC"]:
-                int(default_value)
+                int(value)
             elif column_type in ["TEXT", "BLOB"]:
-                str(default_value)
+                str(value)
             elif column_type == "REAL":
-                float(default_value)
+                float(value)
             else:
                 raise InvalidValue("Unexpected column type")
             return True

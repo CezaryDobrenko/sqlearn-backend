@@ -36,6 +36,15 @@ class TableRowNode(ObjectType):
             ]
         return []
 
+    @classmethod
+    def from_cells(cls, cells: list[TableColumnDataTemplate]):
+        if cells:
+            return cls(
+                id="table_assignment_template",
+                cells=cells,
+            )
+        return None
+
 
 class TableRowConnection(relay.Connection):
     class Meta:

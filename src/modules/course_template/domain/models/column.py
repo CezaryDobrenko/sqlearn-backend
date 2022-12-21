@@ -15,12 +15,11 @@ class TableColumnAssignmentTemplate(BaseModel):
     name: str = Column(String(500))
     type: str = Column(COLUMN_TYPE, nullable=False)
     length: int = Column(Integer)
-    autoincrement_index: int = Column(Integer, default=1)
     default_value: str = Column(String)
 
-    is_autoincrement: bool = Column(Boolean)
-    is_null: bool = Column(Boolean)
-    is_unique: bool = Column(Boolean)
+    is_autoincrement: bool = Column(Boolean, default=False)
+    is_null: bool = Column(Boolean, default=False)
+    is_unique: bool = Column(Boolean, default=False)
 
     table_assignment_template_id: int = Column(
         Integer(),
@@ -50,6 +49,8 @@ class TableColumnAssignmentTemplate(BaseModel):
     def get_default_value(self) -> str:
         if self.default_value:
             return self.default_value
+        if self.is_null:
+            return None
         return COLUMN_TYPE_DEFAULT[self.type.value]
 
     def is_relevant_field_updated(self, **kwargs) -> bool:
@@ -58,3 +59,6 @@ class TableColumnAssignmentTemplate(BaseModel):
                 if getattr(self, field) != kwargs[field]:
                     return True
         return False
+
+    def update_autoincrement_index(self, next_id: int) -> None:
+        self.table_assignment_template.autoincrement_index = next_id

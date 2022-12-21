@@ -4,6 +4,7 @@ from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.database_preset.domain.models.database import Database
 from tests.factories import (
     AssignmentTemplateFactory,
+    ColumnType,
     CourseTemplateFactory,
     DatabaseAssignmentTemplateFactory,
     DatabaseFactory,
@@ -30,13 +31,16 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         assignment_template=assignment_template
     )
     users_table = TableAssignmentTemplateFactory(
-        database_assignment_template=database, name="users"
+        database_assignment_template=database, name="users", autoincrement_index=2
     )
     user_col_1 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=users_table, name="id", is_autoincrement=True
+        table_assignment_template=users_table,
+        name="id",
+        is_autoincrement=True,
+        type=ColumnType.INTEGER,
     )
     user_col_2 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=users_table, name="name"
+        table_assignment_template=users_table, name="name", type=ColumnType.TEXT
     )
     _ = TableColumnDataTemplateFactory(
         table_column_assignment_template=user_col_1, value=1
@@ -51,16 +55,21 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         table_column_assignment_template=user_col_2, value="Josh"
     )
     paintings_table = TableAssignmentTemplateFactory(
-        database_assignment_template=database, name="paintings"
+        database_assignment_template=database, name="paintings", autoincrement_index=2
     )
     paint_col_1 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=paintings_table, name="id", is_autoincrement=True
+        table_assignment_template=paintings_table,
+        name="id",
+        is_autoincrement=True,
+        type=ColumnType.INTEGER,
     )
     paint_col_2 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=paintings_table, name="name"
+        table_assignment_template=paintings_table, name="name", type=ColumnType.TEXT
     )
     paint_col_3 = TableColumnAssignmentTemplateFactory(
-        table_assignment_template=paintings_table, name="user_id"
+        table_assignment_template=paintings_table,
+        name="user_id",
+        type=ColumnType.INTEGER,
     )
     _ = TableColumnDataTemplateFactory(
         table_column_assignment_template=paint_col_1, value=1

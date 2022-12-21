@@ -12,6 +12,7 @@ class TableAssignmentTemplate(BaseModel):
 
     name: str = Column(String(500))
     description: str = Column(String(2000))
+    autoincrement_index: int = Column(Integer, default=1)
 
     database_assignment_template_id: int = Column(
         Integer(),
@@ -59,6 +60,15 @@ class TableAssignmentTemplate(BaseModel):
             raise Exception("Invalid data in table")
 
         return int(data / self.columns.count())
+
+    def next_autoincrement_index(self, update_autoincrement: bool = True) -> int:
+        current_ai = self.autoincrement_index
+        if update_autoincrement:
+            self.autoincrement_index += 1
+        return current_ai
+
+    def reset_autoincrement_index(self):
+        self.autoincrement_index = 1
 
     def get_column(self, column_name: str) -> Optional[TableColumnAssignmentTemplate]:
         if self.has_column(column_name):

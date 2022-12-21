@@ -17,12 +17,16 @@ class ColumnAssignmentTemplateManagementService:
     def create(
         self, table_assignment_template_id: int, name: str, type: str, **kwargs
     ) -> TableColumnAssignmentTemplate:
+        new_is_autoincrement = kwargs.get("is_autoincrement")
+        new_default_value = kwargs.get("default_value")
         with transaction_scope(self.session) as session:
             table = session.query(TableAssignmentTemplate).get(
                 table_assignment_template_id
             )
             current_rows_count = table.rows_count
-            if self.column_manager.can_create(table, name, **kwargs):
+            if self.column_manager.can_create(
+                table, name, type, new_is_autoincrement, new_default_value
+            ):
                 table_column = TableColumnAssignmentTemplate(
                     table_assignment_template=table,
                     name=name,
@@ -44,18 +48,58 @@ class ColumnAssignmentTemplateManagementService:
     def update(
         self, table_column_assignment_template_id: int, **kwargs
     ) -> TableColumnAssignmentTemplate:
-        new_type = kwargs.get("type", None)
+        new_is_autoincrement = kwargs.get("is_autoincrement")
+        new_is_unique = kwargs.get("is_unique")
+        new_is_null = kwargs.get("is_null")
+        new_default_value = kwargs.get("default_value")
+        new_type = kwargs.get("type")
+        new_name = kwargs.get("name")
         with transaction_scope(self.session) as session:
             table_column = session.query(TableColumnAssignmentTemplate).get(
                 table_column_assignment_template_id
             )
-            if self.column_manager.can_update(table_column, **kwargs):
-                previous_type = table_column.type
+            is_relevant_updated_field = table_column.is_relevant_field_updated(**kwargs)
+
+            column_name = table_column.name
+            if new_name is not None:
+                column_name = new_name
+
+            column_type = table_column.type.value
+            if new_type is not None:
+                column_type = new_type
+
+            default_value = table_column.default_value
+            if new_default_value is not None:
+                default_value = new_default_value
+
+            is_unique = table_column.is_unique
+            if new_is_unique is not None:
+                is_unique = new_is_unique
+
+            is_autoincrement = table_column.is_autoincrement
+            if new_is_autoincrement is not None:
+                is_autoincrement = new_is_autoincrement
+
+            is_null = table_column.is_null
+            if new_is_null is not None:
+                is_null = new_is_null
+
+            if self.column_manager.can_update(
+                table_column,
+                column_name,
+                column_type,
+                default_value,
+                is_autoincrement,
+                is_unique,
+                is_null,
+                is_relevant_updated_field,
+            ):
+                previous_is_autoincrement = table_column.is_autoincrement
                 table_column.update(**kwargs)
 
-                if new_type and previous_type != new_type:
-                    for cell in table_column.data:
-                        cell.reset_value()
+                if previous_is_autoincrement is False and is_autoincrement is True:
+                    max_id = self._get_max_id_from_column(table_column)
+                    table_column.update_autoincrement_index(max_id + 1)
 
         return table_column
 
@@ -66,5 +110,18 @@ class ColumnAssignmentTemplateManagementService:
                 table_column_assignment_template_id
             )
             if self.column_manager.can_delete(table_column):
+                if table_column.is_autoincrement:
+                    table_column.table_assignment_template.reset_autoincrement_index()
+
                 session.delete(table_column)
         return True
+
+    def _get_max_id_from_column(
+        self, table_column: TableColumnAssignmentTemplate
+    ) -> int:
+        max_id = 1
+        for cell in table_column.data:
+            current_id = int(cell.value)
+            if current_id > max_id:
+                max_id = current_id
+        return max_id

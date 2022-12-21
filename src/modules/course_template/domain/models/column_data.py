@@ -29,8 +29,10 @@ class TableColumnDataTemplate(BaseModel):
     __repr__ = __str__
 
     def set_value(self, value: Optional[str] = None) -> None:
-        table = self.table_column_assignment_template
-        self.value = value if value else table.get_default_value
+        column = self.table_column_assignment_template
 
-    def reset_value(self) -> None:
-        self.value = self.table_column_assignment_template.get_default_value
+        if column.is_autoincrement:
+            self.value = column.table_assignment_template.next_autoincrement_index()
+            return None
+
+        self.value = value if value else column.get_default_value

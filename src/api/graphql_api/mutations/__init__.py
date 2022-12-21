@@ -8,6 +8,7 @@ from .database import DatabaseMutation
 from .quiz import QuizMutation
 from .relation import TableRelationMutation
 from .table import TableMutation
+from .table_data import TableDataMutation
 from .user import UserMutation
 
 
@@ -21,6 +22,7 @@ class Mutation(
     TableMutation,
     TableColumnMutation,
     TableRelationMutation,
+    TableDataMutation,
     graphene.ObjectType,
 ):
     pass
