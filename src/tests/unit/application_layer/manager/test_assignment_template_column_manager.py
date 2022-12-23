@@ -410,6 +410,7 @@ def test_create_column_with_autoincrement(
     table_assignment_template_factory,
     table_column_assignment_template_factory,
     table_column_data_template_factory,
+    table_row_assignment_template_factory,
 ):
     user = user_factory()
     course_template = course_template_factory(owner=user)
@@ -430,11 +431,17 @@ def test_create_column_with_autoincrement(
     col_2 = table_column_assignment_template_factory(
         table_assignment_template=table, name="name", type=ColumnType.TEXT
     )
+    _ = table_row_assignment_template_factory(
+        table_assignment_template=table, ordinal=1
+    )
     _ = table_column_data_template_factory(
         table_column_assignment_template=col_1, value="98020192741"
     )
     _ = table_column_data_template_factory(
         table_column_assignment_template=col_2, value="Mark"
+    )
+    _ = table_row_assignment_template_factory(
+        table_assignment_template=table, ordinal=2
     )
     _ = table_column_data_template_factory(
         table_column_assignment_template=col_1, value="98020192742"
@@ -443,19 +450,20 @@ def test_create_column_with_autoincrement(
         table_column_assignment_template=col_2, value="Josh"
     )
 
-    update = {
+    kwargs = {
         "current_user": user,
         "name": "new_id",
         "type": "INTEGER",
         "is_autoincrement": True,
     }
     service = ColumnAssignmentTemplateManagementService(db_session)
-    service.create(table.id, **update)
+    service.create(table.id, **kwargs)
 
     column_names = [column.name for column in table.columns.all()]
     _, _, new_column = table.columns.all()
     cell_values = [cell.value for cell in new_column.data.all()]
     assert table.columns.count() == 3
+    assert new_column.data.count() == 2
     assert column_names == ["pesel", "name", "new_id"]
     assert cell_values == ["1", "2"]
 

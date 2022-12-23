@@ -16,6 +16,7 @@ from tests.factories import (
     TableFactory,
     TableRelationAssignmentTemplateFactory,
     TableRelationFactory,
+    TableRowAssignmentTemplateFactory,
 )
 
 
@@ -31,7 +32,7 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         assignment_template=assignment_template
     )
     users_table = TableAssignmentTemplateFactory(
-        database_assignment_template=database, name="users", autoincrement_index=2
+        database_assignment_template=database, name="users", autoincrement_index=3
     )
     user_col_1 = TableColumnAssignmentTemplateFactory(
         table_assignment_template=users_table,
@@ -42,20 +43,34 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
     user_col_2 = TableColumnAssignmentTemplateFactory(
         table_assignment_template=users_table, name="name", type=ColumnType.TEXT
     )
-    _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=user_col_1, value=1
+    user_row_1 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=users_table, ordinal=1
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=user_col_2, value="Mark"
+        table_column_assignment_template=user_col_1,
+        table_row_assignment_template=user_row_1,
+        value=1,
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=user_col_1, value=2
+        table_column_assignment_template=user_col_2,
+        table_row_assignment_template=user_row_1,
+        value="Mark",
+    )
+    user_row_2 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=users_table, ordinal=2
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=user_col_2, value="Josh"
+        table_column_assignment_template=user_col_1,
+        table_row_assignment_template=user_row_2,
+        value=2,
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=user_col_2,
+        table_row_assignment_template=user_row_2,
+        value="Josh",
     )
     paintings_table = TableAssignmentTemplateFactory(
-        database_assignment_template=database, name="paintings", autoincrement_index=2
+        database_assignment_template=database, name="paintings", autoincrement_index=3
     )
     paint_col_1 = TableColumnAssignmentTemplateFactory(
         table_assignment_template=paintings_table,
@@ -71,23 +86,41 @@ def build_assignment_template_database(assignment_template: AssignmentTemplate):
         name="user_id",
         type=ColumnType.INTEGER,
     )
-    _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_1, value=1
+    paint_row_1 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=paintings_table, ordinal=1
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_2, value="MonaLisa"
+        table_column_assignment_template=paint_col_1,
+        table_row_assignment_template=paint_row_1,
+        value=1,
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_3, value=1
+        table_column_assignment_template=paint_col_2,
+        table_row_assignment_template=paint_row_1,
+        value="MonaLisa",
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_1, value=2
+        table_column_assignment_template=paint_col_3,
+        table_row_assignment_template=paint_row_1,
+        value=1,
+    )
+    paint_row_2 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=paintings_table, ordinal=2
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_2, value="SunnyHills"
+        table_column_assignment_template=paint_col_1,
+        table_row_assignment_template=paint_row_2,
+        value=2,
     )
     _ = TableColumnDataTemplateFactory(
-        table_column_assignment_template=paint_col_3, value=2
+        table_column_assignment_template=paint_col_2,
+        table_row_assignment_template=paint_row_2,
+        value="SunnyHills",
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=paint_col_3,
+        table_row_assignment_template=paint_row_2,
+        value=2,
     )
     _ = TableRelationAssignmentTemplateFactory(
         name="old_fk",

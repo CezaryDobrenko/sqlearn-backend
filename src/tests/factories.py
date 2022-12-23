@@ -13,6 +13,7 @@ from modules.course_template.domain.models.quiz import QuizTemplate
 from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
+from modules.course_template.domain.models.row import TableRowAssignmentTemplate
 from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.course_template.domain.models.tag import Tag
 from modules.database_preset.domain.models.column import ColumnType, TableColumn
@@ -168,9 +169,18 @@ class TableRelationAssignmentTemplateFactory(SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "flush"
 
 
+class TableRowAssignmentTemplateFactory(SQLAlchemyModelFactory):
+    table_assignment_template = SubFactory(TableAssignmentTemplateFactory)
+
+    class Meta:
+        model = TableRowAssignmentTemplate
+        sqlalchemy_session_persistence = "flush"
+
+
 class TableColumnDataTemplateFactory(SQLAlchemyModelFactory):
     value = factory.Sequence(lambda n: f"data-{n}")
     table_column_assignment_template = SubFactory(TableColumnAssignmentTemplateFactory)
+    table_row_assignment_template = SubFactory(TableRowAssignmentTemplateFactory)
 
     class Meta:
         model = TableColumnDataTemplate

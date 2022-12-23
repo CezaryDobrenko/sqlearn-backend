@@ -23,6 +23,18 @@ class TableColumnDataTemplate(BaseModel):
         back_populates="data",
     )
 
+    table_row_assignment_template_id: int = Column(
+        Integer(),
+        ForeignKey("table_row_assignment_template.id", ondelete="CASCADE"),
+        index=True,
+        nullable=True,
+    )
+    table_row_assignment_template = relationship(
+        "TableRowAssignmentTemplate",
+        foreign_keys=[table_row_assignment_template_id],
+        back_populates="cells",
+    )
+
     def __str__(self):
         return f"TableColumnDataTemplate({self.value=})"
 
@@ -30,9 +42,21 @@ class TableColumnDataTemplate(BaseModel):
 
     def set_value(self, value: Optional[str] = None) -> None:
         column = self.table_column_assignment_template
+        table = column.table_assignment_template
 
-        if column.is_autoincrement:
-            self.value = column.table_assignment_template.next_autoincrement_index()
+        if value and column.is_autoincrement:
+            # TODO: check if id value is not taken by other row
+            self.value = value
+            table.set_autoincrement_index(int(value))
             return None
 
-        self.value = value if value else column.get_default_value
+        if value:
+            self.value = value
+            return None
+
+        if column.is_autoincrement:
+            self.value = table.get_autoincrement_index()
+            table.update_autoincrement_index()
+            return None
+
+        self.value = column.get_default_value

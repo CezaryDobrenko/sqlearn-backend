@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
 from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
+from modules.course_template.domain.models.row import TableRowAssignmentTemplate
 
 
 class TableAssignmentTemplate(BaseModel):
@@ -26,6 +27,12 @@ class TableAssignmentTemplate(BaseModel):
         back_populates="tables",
     )
 
+    rows: list = relationship(
+        "TableRowAssignmentTemplate",
+        lazy="dynamic",
+        uselist=True,
+        passive_deletes=True,
+    )
     columns: list = relationship(
         "TableColumnAssignmentTemplate",
         lazy="dynamic",
@@ -52,23 +59,21 @@ class TableAssignmentTemplate(BaseModel):
 
     __repr__ = __str__
 
-    @property
-    def rows_count(self) -> int:
-        data = sum([column.data.count() for column in self.columns])
+    def get_autoincrement_index(self) -> int:
+        return self.autoincrement_index
 
-        if data % self.columns.count() != 0:
-            raise Exception("Invalid data in table")
+    def update_autoincrement_index(self):
+        self.autoincrement_index += 1
 
-        return int(data / self.columns.count())
-
-    def next_autoincrement_index(self, update_autoincrement: bool = True) -> int:
-        current_ai = self.autoincrement_index
-        if update_autoincrement:
-            self.autoincrement_index += 1
-        return current_ai
+    def set_autoincrement_index(self, value: int):
+        self.autoincrement_index = value + 1
 
     def reset_autoincrement_index(self):
         self.autoincrement_index = 1
+
+    def next_row_ordinal(self) -> int:
+        last_row = self.rows.order_by(TableRowAssignmentTemplate.ordinal.desc()).first()
+        return last_row.ordinal + 1
 
     def get_column(self, column_name: str) -> Optional[TableColumnAssignmentTemplate]:
         if self.has_column(column_name):

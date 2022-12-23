@@ -23,6 +23,7 @@ from models import (
     TableColumnDataTemplate,
     TableRelation,
     TableRelationAssignmentTemplate,
+    TableRowAssignmentTemplate,
     Tag,
     User,
 )
@@ -50,6 +51,7 @@ model_classes = [
     TableColumnAssignmentTemplate,
     TableColumnDataTemplate,
     TableRelationAssignmentTemplate,
+    TableRowAssignmentTemplate,
 ]
 
 # database conntection config

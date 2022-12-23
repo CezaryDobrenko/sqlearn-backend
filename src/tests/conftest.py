@@ -26,6 +26,7 @@ from tests.factories import (
     TableFactory,
     TableRelationAssignmentTemplateFactory,
     TableRelationFactory,
+    TableRowAssignmentTemplateFactory,
     TagFactory,
     UserFactory,
 )
@@ -45,6 +46,7 @@ register(TableRelationAssignmentTemplateFactory)
 register(TableColumnDataTemplateFactory)
 register(AssignmentTemplateTagFactory)
 register(TagFactory)
+register(TableRowAssignmentTemplateFactory)
 
 
 class RequestFactory:
@@ -90,12 +92,13 @@ def db_session(db_connection):
         TableColumnFactory,
         TableRelationFactory,
         AssignmentTemplateFactory,
-        DatabaseAssignmentTemplateFactory,
         TableAssignmentTemplateFactory,
+        DatabaseAssignmentTemplateFactory,
         TableColumnAssignmentTemplateFactory,
         TableRelationAssignmentTemplateFactory,
         TableColumnDataTemplateFactory,
         AssignmentTemplateTagFactory,
+        TableRowAssignmentTemplateFactory,
         TagFactory,
     ]
     for factory in factories:

@@ -23,7 +23,6 @@ class ColumnAssignmentTemplateManagementService:
             table = session.query(TableAssignmentTemplate).get(
                 table_assignment_template_id
             )
-            current_rows_count = table.rows_count
             if self.column_manager.can_create(
                 table, name, type, new_is_autoincrement, new_default_value
             ):
@@ -36,9 +35,10 @@ class ColumnAssignmentTemplateManagementService:
                 session.add(table_column)
                 session.commit()
 
-                for _ in range(current_rows_count):
+                for table_row in table.rows:
                     column_data = TableColumnDataTemplate(
-                        table_column_assignment_template=table_column
+                        table_column_assignment_template=table_column,
+                        table_row_assignment_template=table_row,
                     )
                     column_data.set_value()
 

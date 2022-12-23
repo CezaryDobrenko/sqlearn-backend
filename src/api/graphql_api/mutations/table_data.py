@@ -1,7 +1,7 @@
 from graphene import ID, Field, List, Mutation, ObjectType, String
 
 from api.graphql_api.authentication import authentication_required
-from api.graphql_api.schema.table import TableRowNode
+from api.graphql_api.schema.table_row import TableRowAssignmentTemplateNode
 from api.graphql_api.utils import retrieve_id
 from modules.course_template.application.services.data_template_service import (
     DataAssignmentTemplateManagementService,
@@ -9,7 +9,7 @@ from modules.course_template.application.services.data_template_service import (
 
 
 class CreateTableAssignmentRow(Mutation):
-    row = Field(TableRowNode)
+    row = Field(TableRowAssignmentTemplateNode)
 
     class Arguments:
         table_assignment_template_id = ID(required=True)
@@ -26,8 +26,8 @@ class CreateTableAssignmentRow(Mutation):
         session = info.context["session"]
         table_assignment_template_pk = retrieve_id(table_assignment_template_id)
         manager = DataAssignmentTemplateManagementService(session)
-        cells = manager.create(table_assignment_template_pk, row_data, **kwargs)
-        return CreateTableAssignmentRow(row=TableRowNode.from_cells(cells))
+        row = manager.create(table_assignment_template_pk, row_data, **kwargs)
+        return CreateTableAssignmentRow(row=row)
 
 
 class TableDataMutation(ObjectType):
