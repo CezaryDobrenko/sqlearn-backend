@@ -45,7 +45,6 @@ class TableColumnDataTemplate(BaseModel):
         table = column.table_assignment_template
 
         if value and column.is_autoincrement:
-            # TODO: check if id value is not taken by other row
             self.value = value
             table.set_autoincrement_index(int(value))
             return None
@@ -59,4 +58,10 @@ class TableColumnDataTemplate(BaseModel):
             table.update_autoincrement_index()
             return None
 
-        self.value = column.get_default_value
+        self.set_default_value()
+
+    def set_default_value(self):
+        self.value = self.table_column_assignment_template.get_default_value
+
+    def set_null_value(self):
+        self.value = None

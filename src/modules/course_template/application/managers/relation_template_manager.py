@@ -50,6 +50,9 @@ class TableRelationAssignmentTemplateManager:
                 raise RelationException("Source column invalid!")
             if not is_relation_table_valid:
                 raise RelationException("Destination column invalid!")
+
+            # TODO: Add validation if defined data is acceptable for relation
+
             return True
         raise RelationException("Relation already defined!")
 

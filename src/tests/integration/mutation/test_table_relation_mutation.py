@@ -334,8 +334,8 @@ def test_update_table_relation_assignment_template_mutation(
     assignment_template = build_assignment_template(user)
     database_template = build_assignment_template_database(assignment_template)
     other_table = build_assignment_template_table(database_template)
-    source_table, related_table, _ = database_template.tables.all()
-    relation = source_table.relations.first()
+    _, related_table, _ = database_template.tables.all()
+    relation = related_table.relations.first()
     new_name = "new_fk"
     new_action = "CASCADE"
     new_table_id = gid(related_table)
@@ -423,8 +423,8 @@ def test_remove_table_relation_assignment_template_mutation(
     user = user_factory()
     assignment_template = build_assignment_template(user)
     database_template = build_assignment_template_database(assignment_template)
-    table, _ = database_template.tables.all()
-    relation = table.relations.first()
+    _, relation_table = database_template.tables.all()
+    relation = relation_table.relations.first()
 
     query = """
         mutation removeTableRelationAssignmentTemplate($relationAssignmentTemplateId: ID!){

@@ -2,6 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
+from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
 from modules.database_preset.domain.models.relation import RELATION_ACTION
 
 
@@ -41,3 +42,15 @@ class TableRelationAssignmentTemplate(BaseModel):
         return f"TableRelationAssignmentTemplate({self.name=} from={self.table}, to={self.relation_table})"
 
     __repr__ = __str__
+
+    @property
+    def source_column(self) -> TableColumnAssignmentTemplate:
+        return self.table.columns.filter(
+            TableColumnAssignmentTemplate.name == self.table_column_name
+        ).first()
+
+    @property
+    def relation_column(self) -> TableColumnAssignmentTemplate:
+        return self.relation_table.columns.filter(
+            TableColumnAssignmentTemplate.name == self.relation_column_name
+        ).first()

@@ -230,8 +230,8 @@ def test_update_column_with_is_unique_when_data_is_unique(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
-    _, col_2, _ = table.columns.all()
+    paintings_table, _ = database_template.tables.all()
+    _, col_2, _ = paintings_table.columns.all()
 
     update = {"current_user": user, "is_unique": True}
     service = ColumnAssignmentTemplateManagementService(db_session)

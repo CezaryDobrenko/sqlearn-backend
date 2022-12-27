@@ -28,12 +28,12 @@ def test_create_relation_when_already_defined(
     with pytest.raises(RelationException):
         kwargs = {"current_user": user}
         service.create(
-            source_table.id,
             destination_table.id,
+            source_table.id,
             "new_name",
             "CASCADE",
-            src_column.name,
             dest_column.name,
+            src_column.name,
             **kwargs
         )
 
@@ -110,8 +110,8 @@ def test_update_relation_with_unmodified_data(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    source_table, _ = database_template.tables.all()
-    relation = source_table.relations.first()
+    _, relation_table = database_template.tables.all()
+    relation = relation_table.relations.first()
 
     update = {
         "current_user": user,

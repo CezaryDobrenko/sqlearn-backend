@@ -2,6 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel
+from modules.course_template.domain.models.column_data import TableColumnDataTemplate
 from modules.database_preset.domain.models.column import (
     COLUMN_TYPE,
     COLUMN_TYPE_DEFAULT,
@@ -59,6 +60,10 @@ class TableColumnAssignmentTemplate(BaseModel):
                 if getattr(self, field) != kwargs[field]:
                     return True
         return False
+
+    def is_value_already_defined(self, value: str) -> bool:
+        cell = self.data.filter(TableColumnDataTemplate.value == value).first()
+        return True if cell else False
 
     def update_autoincrement_index(self, next_id: int) -> None:
         self.table_assignment_template.autoincrement_index = next_id

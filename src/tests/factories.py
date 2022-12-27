@@ -147,8 +147,8 @@ class TableColumnAssignmentTemplateFactory(SQLAlchemyModelFactory):
     name = factory.Sequence(lambda n: f"column_assignment-{n}")
     type = ColumnType.TEXT
     length = 200
-    is_null = True
-    is_unique = True
+    is_null = False
+    is_unique = False
     table_assignment_template = SubFactory(TableAssignmentTemplateFactory)
 
     class Meta:

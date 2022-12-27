@@ -9,6 +9,7 @@ from modules.course_template.domain.models.quiz import QuizTemplate
 from modules.course_template.domain.models.relation import (
     TableRelationAssignmentTemplate,
 )
+from modules.course_template.domain.models.row import TableRowAssignmentTemplate
 from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.user.domain.models.user import User
 
@@ -56,6 +57,13 @@ def _has_user_access_table_relation_assignment_template(
     instance: TableRelationAssignmentTemplate, user: User
 ) -> bool:
     return has_user_access(instance.table, user)
+
+
+@has_user_access.register(TableRowAssignmentTemplate)
+def _has_user_access_table_row_assignment_template(
+    instance: TableRowAssignmentTemplate, user: User
+) -> bool:
+    return has_user_access(instance.table_assignment_template, user)
 
 
 @has_user_access.register(TableColumnDataTemplate)

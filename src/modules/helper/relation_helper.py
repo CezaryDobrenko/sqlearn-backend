@@ -1,5 +1,5 @@
 from sqlalchemy import and_, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Query, Session
 
 from instance_access import has_user_access
 from models import User
@@ -21,26 +21,22 @@ def get_relation_value(relation: RELATION_MODEL, value: str, **kwargs) -> str:
     return kwargs[value] if value in kwargs else getattr(relation, value)
 
 
-def is_relation_exist(
+def get_relations(
     session: Session, relation_model: RELATION_MODEL, column: COLUMN_MODEL
-) -> bool:
-    relations = (
-        session.query(relation_model)
-        .filter(
-            or_(
-                and_(
-                    relation_model.table_id == column.assigned_table_id,
-                    relation_model.table_column_name == column.name,
-                ),
-                and_(
-                    relation_model.relation_table_id == column.assigned_table_id,
-                    relation_model.relation_column_name == column.name,
-                ),
-            )
+) -> Query:
+    relations = session.query(relation_model).filter(
+        or_(
+            and_(
+                relation_model.table_id == column.assigned_table_id,
+                relation_model.table_column_name == column.name,
+            ),
+            and_(
+                relation_model.relation_table_id == column.assigned_table_id,
+                relation_model.relation_column_name == column.name,
+            ),
         )
-        .all()
     )
-    return True if relations else False
+    return relations
 
 
 def is_relation_valid(

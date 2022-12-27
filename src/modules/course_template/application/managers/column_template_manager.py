@@ -12,7 +12,7 @@ from modules.helper.column_helper import (
     can_create_autoincrement_column,
     can_update_column_with_name,
 )
-from modules.helper.relation_helper import is_relation_exist
+from modules.helper.relation_helper import get_relations
 
 
 class TableColumnAssignmentTemplateManager:
@@ -52,7 +52,7 @@ class TableColumnAssignmentTemplateManager:
         is_relevant_updated_field: bool,
     ) -> bool:
         table = column.table_assignment_template
-        exist = is_relation_exist(self.session, TableRelationAssignmentTemplate, column)
+        relations = get_relations(self.session, TableRelationAssignmentTemplate, column)
 
         if not can_update_column_with_name(table, column, column_name):
             raise AlreadyExists("Column with given name already exist!")
@@ -63,7 +63,7 @@ class TableColumnAssignmentTemplateManager:
         if not can_convert_value(column_type, default_value):
             raise InvalidValue("Default value is not valid with given type of column")
 
-        if exist and is_relevant_updated_field:
+        if relations.first() and is_relevant_updated_field:
             raise RelationException("At least one relation pointing at updated column!")
 
         if not self._can_convert_existing_column_data(column_type, column):
@@ -82,7 +82,7 @@ class TableColumnAssignmentTemplateManager:
         return True
 
     def can_delete(self, column: TableColumnAssignmentTemplate) -> bool:
-        if is_relation_exist(self.session, TableRelationAssignmentTemplate, column):
+        if get_relations(self.session, TableRelationAssignmentTemplate, column).first():
             raise RelationException("At least one relation pointing at updated column!")
 
         return True
