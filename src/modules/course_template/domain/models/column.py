@@ -62,7 +62,7 @@ class TableColumnAssignmentTemplate(BaseModel):
         return False
 
     def is_value_already_defined(self, value: str) -> bool:
-        cell = self.data.filter(TableColumnDataTemplate.value == value).first()
+        cell = self.data.filter(TableColumnDataTemplate.value == str(value)).first()
         return True if cell else False
 
     def update_autoincrement_index(self, next_id: int) -> None:

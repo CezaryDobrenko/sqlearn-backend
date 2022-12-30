@@ -1,3 +1,5 @@
+from typing import Optional
+
 from graphene import ID, Boolean, Field, List, Mutation, ObjectType, String
 
 from api.graphql_api.authentication import authentication_required
@@ -22,13 +24,35 @@ class CreateTableAssignmentRow(Mutation):
         info,
         table_assignment_template_id: str,
         row_data: list[list[str]],
-        **kwargs
+        **kwargs,
     ):
         session = info.context["session"]
         table_assignment_template_pk = retrieve_id(table_assignment_template_id)
         manager = DataAssignmentTemplateManagementService(session)
         row = manager.create(table_assignment_template_pk, row_data, **kwargs)
         return CreateTableAssignmentRow(row=row)
+
+
+class UpdateTableAssignmentRow(Mutation):
+    row = Field(TableRowAssignmentTemplateNode)
+
+    class Arguments:
+        table_row_assignment_template_id = ID(required=True)
+        row_data = List(of_type=List(of_type=String))
+
+    @authentication_required()
+    def mutate(
+        self,
+        info,
+        table_row_assignment_template_id: str,
+        row_data: list[list[str]],
+        **kwargs,
+    ):
+        session = info.context["session"]
+        table_row_assignment_template_pk = retrieve_id(table_row_assignment_template_id)
+        manager = DataAssignmentTemplateManagementService(session)
+        row = manager.update_row(table_row_assignment_template_pk, row_data, **kwargs)
+        return UpdateTableAssignmentRow(row=row)
 
 
 class UpdateTableAssignmentCell(Mutation):
@@ -39,11 +63,17 @@ class UpdateTableAssignmentCell(Mutation):
         value = String()
 
     @authentication_required()
-    def mutate(self, info, table_column_data_template_id: str, **kwargs):
+    def mutate(
+        self,
+        info,
+        table_column_data_template_id: str,
+        value: Optional[str],
+        **kwargs,
+    ):
         session = info.context["session"]
         table_column_data_template_pk = retrieve_id(table_column_data_template_id)
         manager = DataAssignmentTemplateManagementService(session)
-        is_removed = manager.update(table_column_data_template_pk, **kwargs)
+        is_removed = manager.update_cell(table_column_data_template_pk, value, **kwargs)
         return UpdateTableAssignmentCell(cell=is_removed)
 
 
@@ -62,7 +92,8 @@ class RemoveTableAssignmentRow(Mutation):
         return RemoveTableAssignmentRow(is_removed=is_removed)
 
 
-class TableDataMutation(ObjectType):
+class CellMutation(ObjectType):
     create_table_assignment_row = CreateTableAssignmentRow.Field()
+    update_table_assignment_row = UpdateTableAssignmentRow.Field()
     update_table_assignment_cell = UpdateTableAssignmentCell.Field()
     remove_table_assignment_row = RemoveTableAssignmentRow.Field()

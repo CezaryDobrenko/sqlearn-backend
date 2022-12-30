@@ -306,7 +306,6 @@ def build_assignment_template_database_variant_2(
         table_assignment_template=warehouse_table,
         name="user_id",
         type=ColumnType.INTEGER,
-        is_null=True,
     )
     warehouse_row_1 = TableRowAssignmentTemplateFactory(
         table_assignment_template=warehouse_table, ordinal=1
@@ -345,6 +344,47 @@ def build_assignment_template_database_variant_2(
         value="2",
     )
 
+    test_table = TableAssignmentTemplateFactory(
+        database_assignment_template=database, name="test", autoincrement_index=3
+    )
+    test_col_1 = TableColumnAssignmentTemplateFactory(
+        table_assignment_template=test_table,
+        name="id",
+        is_autoincrement=True,
+        type=ColumnType.INTEGER,
+    )
+    test_col_2 = TableColumnAssignmentTemplateFactory(
+        table_assignment_template=test_table,
+        name="user_id",
+        type=ColumnType.INTEGER,
+    )
+    test_row_1 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=test_table, ordinal=1
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=test_col_1,
+        table_row_assignment_template=test_row_1,
+        value=1,
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=test_col_2,
+        table_row_assignment_template=test_row_1,
+        value=1,
+    )
+    test_row_2 = TableRowAssignmentTemplateFactory(
+        table_assignment_template=test_table, ordinal=2
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=test_col_1,
+        table_row_assignment_template=test_row_2,
+        value=2,
+    )
+    _ = TableColumnDataTemplateFactory(
+        table_column_assignment_template=test_col_2,
+        table_row_assignment_template=test_row_2,
+        value=2,
+    )
+
     _ = TableRelationAssignmentTemplateFactory(
         name="user_painting_fk",
         action=RelationAction.CASCADE,
@@ -371,11 +411,19 @@ def build_assignment_template_database_variant_2(
     )
     _ = TableRelationAssignmentTemplateFactory(
         name="user_warehouse_fk",
-        action=RelationAction.SET_NULL,
+        action=RelationAction.CASCADE,
         table=warehouse_table,
         table_column_name="user_id",
         relation_table=users_table,
         relation_column_name="id",
+    )
+    _ = TableRelationAssignmentTemplateFactory(
+        name="user_warehourse_test_fk",
+        action=RelationAction.CASCADE,
+        table=test_table,
+        table_column_name="user_id",
+        relation_table=warehouse_table,
+        relation_column_name="user_id",
     )
     return database
 

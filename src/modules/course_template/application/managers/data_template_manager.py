@@ -1,15 +1,8 @@
 from typing import Optional
 
-from exceptions import AlreadyExists, InvalidValue, RelationException
+from exceptions import AlreadyExists, InvalidValue
 from modules.course_template.domain.models.column import TableColumnAssignmentTemplate
-from modules.course_template.domain.models.column_data import TableColumnDataTemplate
-from modules.database_preset.domain.models.column import ColumnType
-from modules.helper.column_helper import (
-    can_convert_value,
-    can_create_autoincrement_column,
-    can_update_column_with_name,
-)
-from modules.helper.relation_helper import get_relations
+from modules.helper.column_helper import can_convert_value
 
 
 class TableDataAssignmentTemplateManager:

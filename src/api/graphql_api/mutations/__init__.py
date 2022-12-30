@@ -2,13 +2,13 @@ import graphene
 
 from .assignment import AssignmentTemplateMutation
 from .assignment_tag import AssignmentTemplateTagMutation
+from .cell import CellMutation
 from .column import TableColumnMutation
 from .course import CourseMutation
 from .database import DatabaseMutation
 from .quiz import QuizMutation
 from .relation import TableRelationMutation
 from .table import TableMutation
-from .table_data import TableDataMutation
 from .user import UserMutation
 
 
@@ -22,7 +22,7 @@ class Mutation(
     TableMutation,
     TableColumnMutation,
     TableRelationMutation,
-    TableDataMutation,
+    CellMutation,
     graphene.ObjectType,
 ):
     pass

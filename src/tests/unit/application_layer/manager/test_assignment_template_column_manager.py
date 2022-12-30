@@ -4,6 +4,7 @@ from exceptions import AlreadyExists, InvalidValue, RelationException
 from modules.course_template.application.services.column_template_service import (
     ColumnAssignmentTemplateManagementService,
 )
+from modules.course_template.domain.models.table import TableAssignmentTemplate
 from modules.database_preset.domain.models.column import ColumnType
 from tests.builders import build_assignment_template_database
 
@@ -20,7 +21,9 @@ def test_update_column_with_name_already_taken_by_other_column(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
@@ -42,7 +45,9 @@ def test_update_column_with_name_already_taken_by_updated_column(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     update = {"current_user": user, "name": "user_id"}
@@ -62,7 +67,9 @@ def test_update_column_with_autoincrement_already_defined_by_other_column(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
@@ -84,7 +91,9 @@ def test_update_column_with_autoincrement_already_defined_by_updated_column(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     column, _, _ = table.columns.all()
 
     update = {"current_user": user, "is_autoincrement": True}
@@ -104,7 +113,9 @@ def test_update_relevant_data_in_column_with_defined_relation(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
@@ -126,7 +137,9 @@ def test_update_irrelevant_data_in_column_with_defined_relation(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     update = {"current_user": user, "is_null": True}
@@ -146,7 +159,9 @@ def test_update_column_with_type_convertable_with_default_value(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, column, _ = table.columns.all()
 
     update = {"current_user": user, "type": "BLOB", "default_value": "test"}
@@ -166,7 +181,9 @@ def test_update_column_with_type_not_convertable_with_default_value(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, column, _ = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
@@ -188,7 +205,9 @@ def test_update_column_with_type_convertable_data(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, column, _ = table.columns.all()
 
     update = {"current_user": user, "type": "BLOB", "default_value": "test"}
@@ -208,7 +227,9 @@ def test_update_column_with_type_not_convertable_data(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, column, _ = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
@@ -230,7 +251,9 @@ def test_update_column_with_is_unique_when_data_is_unique(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    paintings_table, _ = database_template.tables.all()
+    paintings_table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, col_2, _ = paintings_table.columns.all()
 
     update = {"current_user": user, "is_unique": True}
@@ -365,7 +388,9 @@ def test_create_column_with_name_already_taken_by_other_column(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
 
@@ -386,7 +411,9 @@ def test_create_column_with_autoincrement_when_is_already_defined_for_other_colu
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
 
@@ -480,7 +507,9 @@ def test_delete_column_when_relation_exist(
     quiz_template = quiz_template_factory(course_template=course_template)
     assignment_template = assignment_template_factory(quiz_template=quiz_template)
     database_template = build_assignment_template_database(assignment_template)
-    _, table = database_template.tables.all()
+    table = database_template.tables.filter(
+        TableAssignmentTemplate.name == "paintings"
+    ).first()
     _, _, column = table.columns.all()
 
     service = ColumnAssignmentTemplateManagementService(db_session)
